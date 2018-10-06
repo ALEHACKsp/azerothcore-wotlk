@@ -32,6 +32,8 @@ set(CMAKE_MODULE_PATH "${AC_PATH_ROOT}/src/cmake/macros")
 
 include(CheckCXXSourceRuns)
 include(CheckIncludeFiles)
+include(GroupSources)
+include(AutoCollect)
 
 # some utils for cmake
 include(deps/drassil/cmake-utils/utils.cmake)
@@ -139,3 +141,10 @@ CU_RUN_HOOK("BEFORE_SRC_LOAD")
 add_subdirectory(src)
 
 CU_RUN_HOOK("AFTER_SRC_LOAD")
+
+#
+# Loading modules to IDE
+#
+
+add_subdirectory(modules)
+message("Adding shit to IDE...")

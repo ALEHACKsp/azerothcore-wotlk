@@ -218,6 +218,7 @@ add_library(game STATIC
   ${game_STAT_PCH_SRC}
 )
 
+GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 add_dependencies(game revision.h)
 
 # Generate precompiled header

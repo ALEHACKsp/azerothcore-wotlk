@@ -75,3 +75,4 @@ local.properties
 #
 # ==================
 
+src/server/scripts/Custom/*

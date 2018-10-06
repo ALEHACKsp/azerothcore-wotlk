@@ -68,9 +68,9 @@ CCUSTOMOPTIONS=""
 # and create relative confiugurations below
 #
 DATABASES=(
-	"AUTH"
-	"CHARACTERS"
-	"WORLD"
+	"acore_auth"
+	"acore_characters"
+	"acore_world"
 )
 
 OUTPUT_FOLDER="$AC_PATH_ROOT/env/dist/sql/"

@@ -159,6 +159,7 @@ if( NOT WIN32 )
   )
 endif()
 
+GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 add_dependencies(worldserver revision.h)
 
 if( UNIX AND NOT NOJEM )

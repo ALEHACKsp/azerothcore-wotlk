@@ -1,0 +1,45 @@
+/*
+ * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "ScriptLoader.h"
+#include "ScriptMgr.h"
+
+// This is where scripts' loading functions should be declared:
+#ifdef SCRIPTS
+//events
+void AddSC_event_brewfest_scripts();
+void AddSC_event_hallows_end_scripts();
+void AddSC_event_pilgrims_end_scripts();
+void AddSC_event_winter_veil_scripts();
+void AddSC_event_love_in_the_air();
+void AddSC_event_midsummer_scripts();
+void AddSC_event_childrens_week();
+#endif
+
+// The name of this function should match:
+// void Add${NameOfDirectory}Scripts()
+void AddEventScripts()
+{
+#ifdef SCRIPTS
+    AddSC_event_brewfest_scripts();
+    AddSC_event_hallows_end_scripts();
+    AddSC_event_pilgrims_end_scripts();
+    AddSC_event_winter_veil_scripts();
+    AddSC_event_love_in_the_air();
+    AddSC_event_midsummer_scripts();
+    AddSC_event_childrens_week();
+#endif
+}
