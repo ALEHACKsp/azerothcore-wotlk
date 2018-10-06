@@ -295,7 +295,18 @@ public:
             return false;
         }
 
-        uint32 vendor_entry = vendor ? vendor->GetEntry() : 0;
+        char* faddMulti = strtok(nullptr, " ");
+        uint32 addMulti = 0;
+
+        if (faddMulti)
+            addMulti = atol(faddMulti);
+
+        uint32 vendor_entry = 0;
+
+        if (addMulti == 0)
+            vendor_entry = vendor->GetEntry();
+        else
+            vendor_entry = handler->GetSession()->GetCurrentVendor();
 
         if (!sObjectMgr->IsVendorItemValid(vendor_entry, itemId, maxcount, incrtime, extendedcost, handler->GetSession()->GetPlayer()))
         {
@@ -518,7 +529,13 @@ public:
         }
         uint32 itemId = atol(pitem);
 
-        if (!sObjectMgr->RemoveVendorItem(vendor->GetEntry(), itemId))
+        char* faddMulti = strtok(NULL, " ");
+        uint32 addMulti = 0;
+        if (faddMulti)
+            addMulti = atol(faddMulti);
+
+        //if (!sObjectMgr->RemoveVendorItem(vendor->GetEntry(), itemId))
+        if (!sObjectMgr->RemoveVendorItem( (addMulti!=0) ? handler->GetSession()->GetCurrentVendor() : vendor->GetEntry(), itemId))
         {
             handler->PSendSysMessage(LANG_ITEM_NOT_IN_LIST, itemId);
             handler->SetSentErrorMessage(true);
