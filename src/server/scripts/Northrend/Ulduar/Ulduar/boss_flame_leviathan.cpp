@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -167,7 +167,9 @@ enum Misc
     ACTION_DELAY_CANNON             = 5,
 };
 
-#define LV_SAY_PLAYER_RIDE  = "Unauthorized entity attempting circuit overload. Activating anti-personnel countermeasures."
+//#define LV_SAY_PLAYER_RIDE  = "Unauthorized entity attempting circuit overload. Activating anti-personnel countermeasures."
+#define LV_SAY_PLAYER_RIDE  = u8"未经授权的实体尝试电路过载。激活反步兵对策。"
+
 
 ///////////////////////////////////////////
 //
@@ -606,15 +608,18 @@ void boss_flame_leviathan::boss_flame_leviathanAI::SayPursue()
     switch (urand(0,2))
     {
         case 0:
-            me->MonsterYell("Threat re-evaluated. Target assessment complete. Changing course.", LANG_UNIVERSAL, 0);
+            /*me->MonsterYell("Threat re-evaluated. Target assessment complete. Changing course.", LANG_UNIVERSAL, 0);*/
+            me->MonsterYell(u8"威胁变更..", LANG_UNIVERSAL, 0);
             me->PlayDirectSound(LV_SOUND_TARGET1);
             break;
         case 1:
-            me->MonsterYell("Pursuit objective modified. Changing course.", LANG_UNIVERSAL, 0);
+            /*me->MonsterYell("Pursuit objective modified. Changing course.", LANG_UNIVERSAL, 0);*/
+            me->MonsterYell(u8"目标变更..", LANG_UNIVERSAL, 0);
             me->PlayDirectSound(LV_SOUND_TARGET2);
             break;
         case 2:
-            me->MonsterYell("Hostile entity stratagem predicted. Rerouting battle function. Changing course.", LANG_UNIVERSAL, 0);
+            /*me->MonsterYell("Hostile entity stratagem predicted. Rerouting battle function. Changing course.", LANG_UNIVERSAL, 0);*/
+            me->MonsterYell(u8"重置战斗系统..", LANG_UNIVERSAL, 0);
             me->PlayDirectSound(LV_SOUND_TARGET3);
             break;
     }
@@ -626,8 +631,10 @@ void boss_flame_leviathan::boss_flame_leviathanAI::SpellHit(Unit*  /*caster*/, c
     {
         _shutdown = true; // ACHIEVEMENT
 
-        me->MonsterTextEmote("Flame Leviathan's circuits overloaded.", 0, true);
-        me->MonsterTextEmote("Automatic repair sequence initiated.", 0, true);
+        //me->MonsterTextEmote("Flame Leviathan's circuits overloaded.", 0, true);
+        //me->MonsterTextEmote("Automatic repair sequence initiated.", 0, true);
+        me->MonsterTextEmote(u8"烈火猛兽的电路超载了.", 0, true);
+        me->MonsterTextEmote(u8"自动修复程序启动.", 0, true);
 
         switch (urand(0,2))
         {
@@ -664,7 +671,8 @@ void boss_flame_leviathan::boss_flame_leviathanAI::JustDied(Unit*)
         m_pInstance->SetData(DATA_VEHICLE_SPAWN, VEHICLE_POS_NONE);
     }
 
-    me->MonsterYell("Total systems failure. Defense protocols breached. Leviathan Unit shutting down.", LANG_UNIVERSAL, 0);
+    /*me->MonsterYell("Total systems failure. Defense protocols breached. Leviathan Unit shutting down.", LANG_UNIVERSAL, 0);*/
+    me->MonsterYell(u8"系统全面故障,单位关闭中。", LANG_UNIVERSAL, 0);
     me->PlayDirectSound(LV_SOUND_DIE);
 
     TurnGates(false, true);
@@ -1195,7 +1203,8 @@ public:
     bool OnGossipHello(Player* player, Creature* creature)
     {
         if (creature->GetInstanceScript() && creature->GetInstanceScript()->GetData(TYPE_LEVIATHAN) == NOT_STARTED && !creature->AI()->GetData(DATA_EVENT_STARTED))
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Activate secondary defensive systems.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            /*player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Activate secondary defensive systems.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);*/
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, u8"激活第二防卫系统", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
         return true;
@@ -1206,13 +1215,14 @@ public:
         switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
-                creature->MonsterSay("Activating secondary defensive systems will result in the extermination of unauthorized life forms via orbital emplacements. You are an unauthorized life form.", LANG_UNIVERSAL, 0);
+                //creature->MonsterSay("Activating secondary defensive systems will result in the extermination of unauthorized life forms via orbital emplacements. You are an unauthorized life form.", LANG_UNIVERSAL, 0);
                 player->PlayerTalkClass->ClearMenus();
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Confirmed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+                //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Confirmed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, u8"确认.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                 player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
-                creature->MonsterSay("Security override permitted. Secondary defensive systems activated. Backup deactivation for secondary systems can be accessed via individual generators located on the concourse. ", LANG_UNIVERSAL, 0);
+                //creature->MonsterSay("Security override permitted. Secondary defensive systems activated. Backup deactivation for secondary systems can be accessed via individual generators located on the concourse. ", LANG_UNIVERSAL, 0);
                 creature->AI()->DoAction(ACTION_START_NORGANNON_EVENT);
 
                 player->CLOSE_GOSSIP_MENU();
@@ -1285,39 +1295,39 @@ public:
                             NextStep(14000);
                             break;
                         case 1:
-                            Say("I heard a story or two of a Lore Keeper in Uldaman that fit your description. Do you serve a similar purpose?", false);
+                            //Say("I heard a story or two of a Lore Keeper in Uldaman that fit your description. Do you serve a similar purpose?", false);
                             NextStep(10000);
                             break;
                         case 2:
-                            Say("I was constructed to serve as a repository for essential information regarding this complex. My primary functions include communicating the status of the frontal defense systems and assessing the status of the entity that this complex was built to imprison.", true);
+                            //Say("I was constructed to serve as a repository for essential information regarding this complex. My primary functions include communicating the status of the frontal defense systems and assessing the status of the entity that this complex was built to imprison.", true);
                             NextStep(14000);
                             break;
                         case 3:
-                            Say("Frontal defense systems? Is there something I should let Brann know before he has anyone attempt to enter the complex?", false);
+                            //Say("Frontal defense systems? Is there something I should let Brann know before he has anyone attempt to enter the complex?", false);
                             NextStep(11000);
                             break;
                         case 4:
-                            Say("Access to the interior of the complex is currently restricted. Primary defensive emplacements are active. Secondary systems are currently non-active.", true);
+                            //Say("Access to the interior of the complex is currently restricted. Primary defensive emplacements are active. Secondary systems are currently non-active.", true);
                             NextStep(12000);
                             break;
                         case 5:
-                            Say("Can you detail the nature of these defense systems?", false);
+                            //Say("Can you detail the nature of these defense systems?", false);
                             NextStep(8000);
                             break;
                         case 6:
-                            Say("Compromise of complex detected, security override enabled - query permitted.", true);
+                            //Say("Compromise of complex detected, security override enabled - query permitted.", true);
                             NextStep(7000);
                             break;
                         case 7:
-                            Say("Primary defensive emplacements consist of iron constructs and Storm Beacons, which will generate additional constructs as necessary. Secondary systems consist of orbital defense emplacements.", true);
+                            //Say("Primary defensive emplacements consist of iron constructs and Storm Beacons, which will generate additional constructs as necessary. Secondary systems consist of orbital defense emplacements.", true);
                             NextStep(11000);
                             break;
                         case 8:
-                            Say("Got it. At least we don't have to deal with those orbital emplacements.", false);
+                            //Say("Got it. At least we don't have to deal with those orbital emplacements.", false);
                             NextStep(7000);
                             break;
                         case 9:
-                            Say("Rhydian, make sure you let Brann and Archmage Pentarus know about those defenses immediately.", false);
+                            //Say("Rhydian, make sure you let Brann and Archmage Pentarus know about those defenses immediately.", false);
                             NextStep(7000);
                             break;
                         case 10:
@@ -1326,15 +1336,15 @@ public:
                                 c->MonsterTextEmote("Archmage Rhydian Nods.", 0, false);
                                 c->GetMotionMaster()->MovePoint(0, -720.6f, -61.7f, 429.84f);
                             }
-                            Say("And you mentioned an imprisoned entity? What is the nature of this entity and what is its status?", false);
+                            //Say("And you mentioned an imprisoned entity? What is the nature of this entity and what is its status?", false);
                             NextStep(6000);
                             break;
                         case 11:
-                            Say("Entity designate: Yogg-Saron. Security has been compromised. Prison operational status unknown. Unable to contact Watchers for notification purposes.", true);
+                            //Say("Entity designate: Yogg-Saron. Security has been compromised. Prison operational status unknown. Unable to contact Watchers for notification purposes.", true);
                             NextStep(9000);
                             break;
                         case 12:
-                            Say("Yogg-Saron is here? It sounds like we really will have our hands full then.", false);
+                            //Say("Yogg-Saron is here? It sounds like we really will have our hands full then.", false);
                             
                             if (Creature* c = me->FindNearestCreature(NPC_START_BRANN_BRONZEBEARD, 110.0f, true) )
                                 c->AI()->DoAction(ACTION_START_NORGANNON_BRANN);
@@ -1543,7 +1553,8 @@ public:
                 {
                     if (me->GetDistance2d(who) <= 60.0f)
                     {
-                        Say("The iron dwarves have been seen emerging from the bunkers at the base of the pillars straight ahead of you. Destroy the bunkers and they will be forced to fall back.");
+                        //Say("The iron dwarves have been seen emerging from the bunkers at the base of the pillars straight ahead of you. Destroy the bunkers and they will be forced to fall back.");
+                        Say(u8"在你前面的柱子上，我们看到了那些铁矮人从掩体上浮现出来。摧毁掩体，他们会被迫撤退。");
                         me->PlayDirectSound(RSOUND_ENGAGE);
                         _helpLock = true;
                     }
@@ -1553,7 +1564,8 @@ public:
                 {
                     if (me->GetDistance2d(who) <= 60.0f && who->GetPositionZ() > 430.0f)
                     {
-                        Say("This generator powers Mimiron's Gaze. In moments, it can turn earth to ash, stone to magma--we cannot let it reach full power!");
+                        //Say("This generator powers Mimiron's Gaze. In moments, it can turn earth to ash, stone to magma--we cannot let it reach full power!");
+                        Say(u8"这个发电机可以把泥土变成灰烬，我们不能让它完全充能！");
                         me->PlayDirectSound(RSOUND_MIMIRON);
                         _lock = true;
                     }
@@ -1563,7 +1575,8 @@ public:
                 {
                     if (me->GetDistance2d(who) <= 60.0f && who->GetPositionZ() < 380.0f)
                     {
-                        Say("You're approaching the tower of Freya. It contains the power to turn barren wastelands into jungles teeming with life overnight");
+                        //Say("You're approaching the tower of Freya. It contains the power to turn barren wastelands into jungles teeming with life overnight");
+                        Say(u8"你在接近芙蕾雅的塔，它蕴含着生命的力量");
                         me->PlayDirectSound(RSOUND_FREYA);
                         _lock = true;
                     }
@@ -1573,7 +1586,8 @@ public:
                 {
                     if (me->GetDistance2d(who) <= 40.0f)
                     {
-                        Say("It appears you are near a repair station. Drive your vehicle on to the platform and it should be automatically repaired.");
+                        //Say("It appears you are near a repair station. Drive your vehicle on to the platform and it should be automatically repaired.");
+                        Say(u8"看起来你旁边有个自动维修站。把你的战车开上去接受自动修理");
                         me->PlayDirectSound(RSOUND_STATION);
                         _lock = true;
                     }
@@ -1583,7 +1597,8 @@ public:
                 {
                     if (me->GetDistance2d(who) <= 40.0f)
                     {
-                        Say("This tower powers the hammer of Hodir. It is said to have the power to turn entire armies to ice!");
+                        //Say("This tower powers the hammer of Hodir. It is said to have the power to turn entire armies to ice!");
+                        Say(u8"这座塔为霍迪尔的锤子供电。据说有能力把敌人全部变成冰！");
                         me->PlayDirectSound(RSOUND_HODIR);
                         _lock = true;
                     }
@@ -1593,7 +1608,8 @@ public:
                 {
                     if (me->GetDistance2d(who) <= 60.0f)
                     {
-                        Say("Aaaah, the tower of Krolmir. It is said that the power of Thorim has been used only once. And that it turned an entire continent to dust...");
+                        //Say("Aaaah, the tower of Krolmir. It is said that the power of Thorim has been used only once. And that it turned an entire continent to dust...");
+                        Say(u8"克罗米尔塔。据说托里姆的力量只被使用过一次。把整个大陆变成了尘土…");
                         me->PlayDirectSound(RSOUND_THORIM);
                         _lock = true;
                     }
@@ -1603,7 +1619,8 @@ public:
                 {
                     if (who->GetPositionX() >= -480.0f)
                     {
-                        Say("There are four generators powering the defense structures. If you sabotage the generators, the missile attacks will stop!");
+                        //Say("There are four generators powering the defense structures. If you sabotage the generators, the missile attacks will stop!");
+                        Say(u8"有四个发电机为防御结构供电。如果你破坏发电机，导弹攻击就会停止！");
                         me->PlayDirectSound(RSOUND_GENERATORS);
                         _lock = true;
                     }
@@ -1996,7 +2013,8 @@ class spell_pursue : public SpellScriptLoader
                     for (SeatMap::const_iterator itr = target->GetVehicleKit()->Seats.begin(); itr != target->GetVehicleKit()->Seats.end(); ++itr)
                         if (IS_PLAYER_GUID(itr->second.Passenger.Guid))
                         {
-                            caster->MonsterTextEmote("Flame Leviathan pursues $N.", ObjectAccessor::GetPlayer(*caster, itr->second.Passenger.Guid), true);
+                            //caster->MonsterTextEmote("Flame Leviathan pursues $N.", ObjectAccessor::GetPlayer(*caster, itr->second.Passenger.Guid), true);
+                            caster->MonsterTextEmote(u8"烈火猛兽开始发动攻击 $N.", ObjectAccessor::GetPlayer(*caster, itr->second.Passenger.Guid), true);
                             return;
                         }
             }

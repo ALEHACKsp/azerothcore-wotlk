@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -61,14 +61,23 @@
 #define GO_HARPOON_GUN_4                    194543
 #define GO_BROKEN_HARPOON                   194565
 
-#define TEXT_GOSSIP_ACTION                  "We are ready to help!"
-#define TEXT_EE_AGGRO                       "Give us a moment to prepare to build the turrets."
-#define TEXT_EE_MOVE_OUT                    "Ready to move out, keep those dwarves off of our backs!"
-#define TEXT_EE_FIRES_OUT                   "Fires out! Let's rebuild those turrets!"
+//#define TEXT_GOSSIP_ACTION                  "We are ready to help!"
+//#define TEXT_EE_AGGRO                       "Give us a moment to prepare to build the turrets."
+//#define TEXT_EE_MOVE_OUT                    "Ready to move out, keep those dwarves off of our backs!"
+//#define TEXT_EE_FIRES_OUT                   "Fires out! Let's rebuild those turrets!"
+//
+//#define TEXT_TURRET_READY                   "Harpoon Turret is ready for use!"
+//#define TEXT_DEEP_BREATH                    "Razorscale takes a deep breath..."
+//#define TEXT_GROUNDED_PERMANENTLY           "Razorscale grounded permanently!"
 
-#define TEXT_TURRET_READY                   "Harpoon Turret is ready for use!"
-#define TEXT_DEEP_BREATH                    "Razorscale takes a deep breath..."
-#define TEXT_GROUNDED_PERMANENTLY           "Razorscale grounded permanently!"
+#define TEXT_GOSSIP_ACTION                  u8"我们准备好了!"
+#define TEXT_EE_AGGRO                       u8"给我们一点时间来准备建造塔楼。"
+#define TEXT_EE_MOVE_OUT                    u8"准备搬出去，让那些矮人远离我们！"
+#define TEXT_EE_FIRES_OUT                   u8"开火！让我们重建那些塔！"
+
+#define TEXT_TURRET_READY                   u8"哈伯特塔已经可以使用！"
+#define TEXT_DEEP_BREATH                    u8"Razorscale 深呼。"
+#define TEXT_GROUNDED_PERMANENTLY           u8"Razorscale 遁地！"
 
 
 #define CORDS_GROUND                        588.0f, -166.0f, 391.1f

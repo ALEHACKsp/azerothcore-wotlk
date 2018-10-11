@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -43,16 +43,27 @@
 #define NPC_SCORCHED_GROUND             33123
 #define NPC_WATER_TRIGGER               22515
 
-#define TEXT_AGGRO                      "Insolent whelps! Your blood will temper the weapons used to reclaim this world!"
-#define TEXT_ACTIVATE_CONSTRUCT         "Arise, soldiers of the Iron Crucible! The Makers' will be done!"
-#define TEXT_SCORCH_1                   "Let the inferno consume you!"
-#define TEXT_SCORCH_2                   "BURN! Burn in the makers fire!"
-#define TEXT_SLAG_POT                   "I will burn away your impurities!"
-#define TEXT_SLAY_1                     "More scraps for the scrapheap!"
-#define TEXT_SLAY_2                     "Your bones will serve as kindling!"
-#define TEXT_BERSERK                    "Let it be finished!"
-#define TEXT_DEATH                      "I. Have. Failed."
-#define TEXT_FLAME_JETS                 "Ignis The Furnace Master begins to cast Flame Jets!"
+//#define TEXT_AGGRO                      "Insolent whelps! Your blood will temper the weapons used to reclaim this world!"
+//#define TEXT_ACTIVATE_CONSTRUCT         "Arise, soldiers of the Iron Crucible! The Makers' will be done!"
+//#define TEXT_SCORCH_1                   "Let the inferno consume you!"
+//#define TEXT_SCORCH_2                   "BURN! Burn in the makers fire!"
+//#define TEXT_SLAG_POT                   "I will burn away your impurities!"
+//#define TEXT_SLAY_1                     "More scraps for the scrapheap!"
+//#define TEXT_SLAY_2                     "Your bones will serve as kindling!"
+//#define TEXT_BERSERK                    "Let it be finished!"
+//#define TEXT_DEATH                      "I. Have. Failed."
+//#define TEXT_FLAME_JETS                 "Ignis The Furnace Master begins to cast Flame Jets!"
+
+#define TEXT_AGGRO                      u8"辣妹！你的血液会用来夺回这个世界！"
+#define TEXT_ACTIVATE_CONSTRUCT         u8"崛起，铁坩埚战士！制造商将会完成！"
+#define TEXT_SCORCH_1                   u8"让地狱吞噬你！"
+#define TEXT_SCORCH_2                   u8"烧！烧掉制造商！"
+#define TEXT_SLAG_POT                   u8"我会把你的杂质烧掉！"
+#define TEXT_SLAY_1                     u8"更多的标本！"
+#define TEXT_SLAY_2                     u8"你的骨头就像个笑话！"
+#define TEXT_BERSERK                    u8"结束吧"
+#define TEXT_DEATH                      u8"我。失败。了"
+#define TEXT_FLAME_JETS                 u8"炉主开始铸造火焰喷射流！"
 
 #define SOUND_AGGRO                     15564
 #define SOUND_ACTIVATE_CONSTRUCT        15565

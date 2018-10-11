@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -311,12 +311,14 @@ public:
 
             if (urand(0,1))
             {
-                me->MonsterYell("Forgive me.", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("Forgive me.", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"原谅我.", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_SLAY1);
             }
             else
             {
-                me->MonsterYell("From your death springs life anew!", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("From your death springs life anew!", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"你的死亡带来新生", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_SLAY2);
             }
         }
@@ -326,7 +328,9 @@ public:
             // kaboom!
             if (damage >= me->GetHealth())
             {
-                me->MonsterYell("His hold on me dissipates. I can see clearly once more. Thank you, heroes.", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("His hold on me dissipates. I can see clearly once more. Thank you, heroes.", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"他对我的影响减弱了，谢谢你们英雄们。", LANG_UNIVERSAL, 0);
+
                 me->PlayDirectSound(SOUND_DEATH);
                 
                 damage = 0;
@@ -380,7 +384,8 @@ public:
             // Wave of three
             if (_waveNumber == 1)
             {
-                me->MonsterYell("Children, assist me!", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("Children, assist me!", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"帮助我孩子们!", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_TRIO);
                 me->SummonCreature(NPC_ANCIENT_WATER_SPIRIT, me->GetPositionX()+urand(5,15), me->GetPositionY()+urand(5,15), me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT));
                 me->SummonCreature(NPC_STORM_LASHER, me->GetPositionX()+urand(5,15), me->GetPositionY()+urand(5,15), me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT));
@@ -389,14 +394,16 @@ public:
             // Ancient Conservator
             else if (_waveNumber == 2)
             {
-                me->MonsterYell("Eonar, your servant requires aid!", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("Eonar, your servant requires aid!", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"Eonar, 你的侍者需要帮助!", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_CONSERVATOR);
                 me->SummonCreature(NPC_ANCIENT_CONSERVATOR, me->GetPositionX()+urand(5,15), me->GetPositionY()+urand(5,15), me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT), 0, TEMPSUMMON_CORPSE_DESPAWN);
             }
             // Detonating Lashers
             else if (_waveNumber == 3)
             {
-                me->MonsterYell("The swarm of the elements shall overtake you!", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("The swarm of the elements shall overtake you!", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"这群元素要超过你！", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_DETONATING);
                 for (uint8 i = 0; i < 10; ++i)
                     me->SummonCreature(NPC_DETONATING_LASHER, me->GetPositionX()+urand(5,20), me->GetPositionY()+urand(5,20), me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT), 0, TEMPSUMMON_CORPSE_DESPAWN);

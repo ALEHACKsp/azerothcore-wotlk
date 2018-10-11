@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -85,13 +85,21 @@ enum VezaxEvents
     EVENT_RESTORE_TARGET                        = 11,
 };
 
-#define TEXT_VEZAX_AGGRO                            "Your destruction will herald a new age of suffering!"
-#define TEXT_VEZAX_SLAIN_1                          "You thought to stand before the legions of death... and survive?"
-#define TEXT_VEZAX_SLAIN_2                          "Defiance... a flaw of mortality."
-#define TEXT_VEZAX_SURGE                            "The black blood of Yogg-Saron courses through me! I. AM. UNSTOPPABLE!"
-#define TEXT_VEZAX_BERSERK                          "Your defeat was inevitable!"
-#define TEXT_VEZAX_DEATH                            "Oh, what horrors await...."
-#define TEXT_VEZAX_HARDMODE                         "Behold, now! Terror, absolute!"
+//#define TEXT_VEZAX_AGGRO                            "Your destruction will herald a new age of suffering!"
+//#define TEXT_VEZAX_SLAIN_1                          "You thought to stand before the legions of death... and survive?"
+//#define TEXT_VEZAX_SLAIN_2                          "Defiance... a flaw of mortality."
+//#define TEXT_VEZAX_SURGE                            "The black blood of Yogg-Saron courses through me! I. AM. UNSTOPPABLE!"
+//#define TEXT_VEZAX_BERSERK                          "Your defeat was inevitable!"
+//#define TEXT_VEZAX_DEATH                            "Oh, what horrors await...."
+//#define TEXT_VEZAX_HARDMODE                         "Behold, now! Terror, absolute!"
+
+#define TEXT_VEZAX_AGGRO                            u8"你的毁灭将预示着一个痛苦的新时代！"
+#define TEXT_VEZAX_SLAIN_1                          u8"你以为站在死亡的军团面前，还活着吗？"
+#define TEXT_VEZAX_SLAIN_2                          u8"反抗，死亡的瑕疵。"
+#define TEXT_VEZAX_SURGE                            u8"尤格-萨隆的黑色血液！我不可阻挡！"
+#define TEXT_VEZAX_BERSERK                          u8"你的失败是不可避免的！"
+#define TEXT_VEZAX_DEATH                            u8"可怕的等待…"
+#define TEXT_VEZAX_HARDMODE                         u8"瞧，现在！绝对恐怖！"
 
 
 class boss_vezax : public CreatureScript

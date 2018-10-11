@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -493,12 +493,14 @@ public:
 
             if (urand(0,1))
             {
-                me->MonsterYell("Can't you at least put up a fight!?", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("Can't you at least put up a fight!?", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"你不能至少打一场战斗吗？", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_SLAY1);
             }
             else
             {
-                me->MonsterYell("Pathetic!", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("Pathetic!", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"可悲的凡人!", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_SLAY2);
             }
         }
@@ -532,7 +534,8 @@ public:
                 me->GetMotionMaster()->MoveJump(Middle.GetPositionX(), Middle.GetPositionY(), Middle.GetPositionZ(), 20, 20);
                 me->RemoveAura(SPELL_SHEATH_OF_LIGHTNING);
 
-                me->MonsterYell("Impertinent whelps! You dare challenge me atop my pedestal! I will crush you myself!", LANG_UNIVERSAL, 0);
+                //me->MonsterYell("Impertinent whelps! You dare challenge me atop my pedestal! I will crush you myself!", LANG_UNIVERSAL, 0);
+                me->MonsterYell(u8"无忧无虑！你敢在我的基座上挑战我！我会亲自毁灭你的！", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_JUMPDOWN);
 
                 // Hard Mode
@@ -565,7 +568,8 @@ public:
                     events.Reset();
                     DisableThorim(true);
 
-                    me->MonsterYell("Stay your arms! I yield!", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("Stay your arms! I yield!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"住手！我认输！", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_DEFEATED);
                     
                     events.SetPhase(EVENT_PHASE_OUTRO);
@@ -635,15 +639,18 @@ public:
             switch (urand(0,2))
             {
                 case 0:
-                    me->MonsterYell("Behold the power of the storms and despair!", LANG_UNIVERSAL, 0);
+                    /*me->MonsterYell("Behold the power of the storms and despair!", LANG_UNIVERSAL, 0);*/
+                    me->MonsterYell(u8"看风暴和绝望的力量！", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_SPECIAL1);
                     break;
                 case 1:
-                    me->MonsterYell("Do not hold back! Destroy them!", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("Do not hold back! Destroy them!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"别退缩！摧毁他们！", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_SPECIAL2);
                     break;
                 case 2:
-                    me->MonsterYell("Have you begun to regret your intrusion? ", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("Have you begun to regret your intrusion? ", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"你开始后悔你的入侵了吗？", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_SPECIAL3);
                     break;
             }
@@ -671,7 +678,8 @@ public:
             switch (events.GetEvent())
             {
                 case EVENT_THORIM_AGGRO:
-                    me->MonsterYell("Interlopers! You mortals who dare to interfere with my sport will pay... Wait--you...", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("Interlopers! You mortals who dare to interfere with my sport will pay... Wait--you...", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"闯入者！那些胆敢干涉我的运动的人会付出代价的。等等：你…", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_AGGRO1);
                     events.ScheduleEvent(EVENT_THORIM_AGGRO2, 9000);
                     events.PopEvent();
@@ -682,7 +690,8 @@ public:
                     break;
                 case EVENT_THORIM_AGGRO2:
                 {
-                    me->MonsterYell("I remember you... In the mountains... But you... what is this? Where am--", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("I remember you... In the mountains... But you... what is this? Where am--", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"我记得你…在山里…但你…这是什么？在哪里：", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_AGGRO2);
                     events.PopEvent();
 
@@ -723,7 +732,8 @@ public:
                     }
 
                     // No players found
-                    me->MonsterYell("Failures! Weaklings!", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("Failures! Weaklings!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"失败！懦夫！", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_AWIPE);
                     me->SummonCreature(NPC_LIGHTNING_ORB, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
 
@@ -760,14 +770,17 @@ public:
                 case EVENT_THORIM_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
                     events.PopEvent();
-                    me->MonsterYell("My patience has reached its limit!", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("My patience has reached its limit!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"我的忍耐已经达到极限了！", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_BERSERK);
                     break;
                 case EVENT_THORIM_OUTRO1:
                     events.PopEvent();
                     if (_hardMode)
                     {
-                        me->MonsterYell("You! Fiend! You are not my beloved! Be gone!", LANG_UNIVERSAL, 0);
+                        //me->MonsterYell("You! Fiend! You are not my beloved! Be gone!", LANG_UNIVERSAL, 0);
+                        me->MonsterYell(u8"你！恶魔！你不是我的爱人！走开！", LANG_UNIVERSAL, 0);
+
                         me->PlayDirectSound(SOUND_HARD1);
                         events.ScheduleEvent(EVENT_THORIM_OUTRO2, 5000, 0, 3);
                         EntryCheckPredicate pred(NPC_SIF);
@@ -775,7 +788,9 @@ public:
                     }
                     else
                     {
-                        me->MonsterYell("I feel as though I am awakening from a nightmare, but the shadows in this place yet linger.", LANG_UNIVERSAL, 0);
+                        //me->MonsterYell("I feel as though I am awakening from a nightmare, but the shadows in this place yet linger.", LANG_UNIVERSAL, 0);
+                        me->MonsterYell(u8"我感觉好像我正在从噩梦中醒来，但这地方的阴影却挥之不去。", LANG_UNIVERSAL, 0);
+
                         me->PlayDirectSound(SOUND_NORM1);
                         events.ScheduleEvent(EVENT_THORIM_OUTRO2, 9000, 0, 3);
                     }
@@ -784,13 +799,16 @@ public:
                     events.PopEvent();
                     if (_hardMode)
                     {
-                        me->MonsterYell("Behold the hand behind all the evil that has befallen Ulduar! Left my kingdom in ruins, corrupted my brother and slain my wife!", LANG_UNIVERSAL, 0);
+                        //me->MonsterYell("Behold the hand behind all the evil that has befallen Ulduar! Left my kingdom in ruins, corrupted my brother and slain my wife!", LANG_UNIVERSAL, 0);
+                        me->MonsterYell(u8"把所有的邪恶都抛诸脑后！把我的王国毁了，毁了我的兄弟，杀死了我的妻子！", LANG_UNIVERSAL, 0);
+
                         me->PlayDirectSound(SOUND_HARD2);
                         events.ScheduleEvent(EVENT_THORIM_OUTRO3, 12000, 0, 3);
                     }
                     else
                     {
-                        me->MonsterYell("Sif... was Sif here? Impossible--she died by my brother's hand. A dark nightmare indeed....", LANG_UNIVERSAL, 0);
+                        //me->MonsterYell("Sif... was Sif here? Impossible--she died by my brother's hand. A dark nightmare indeed....", LANG_UNIVERSAL, 0);
+                        me->MonsterYell(u8"Sif，是sif吗？不可能--她死于我哥哥的手。黑暗噩梦…", LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_NORM2);
                         events.ScheduleEvent(EVENT_THORIM_OUTRO3, 10000, 0, 3);
                     }
@@ -799,12 +817,14 @@ public:
                     events.PopEvent();
                     if (_hardMode)
                     {
-                        me->MonsterYell("And now it falls to you, champions, to avenge us all! The task before you is great, but I will lend you my aid as I am able. You must prevail!", LANG_UNIVERSAL, 0);
+                        //me->MonsterYell("And now it falls to you, champions, to avenge us all! The task before you is great, but I will lend you my aid as I am able. You must prevail!", LANG_UNIVERSAL, 0);
+                        me->MonsterYell(u8"现在轮到你了，冠军，为我们报仇！你很棒，但我会借给你我的援助。你必须占上风！", LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_HARD3);
                     }
                     else
                     {
-                        me->MonsterYell("I need time to reflect.... I will aid your cause if you should require it. I owe you at least that much. Farewell.", LANG_UNIVERSAL, 0);
+                        //me->MonsterYell("I need time to reflect.... I will aid your cause if you should require it. I owe you at least that much. Farewell.", LANG_UNIVERSAL, 0);
+                        me->MonsterYell(u8"我需要时间来反映…如果你需要，我会帮助你的。我至少欠你那么多。再见。", LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_NORM3);
                     }
 
@@ -888,17 +908,22 @@ public:
                 case EVENT_SIF_FINISH_DOMINION:
                     events.PopEvent();
                     me->PlayDirectSound(SOUND_SIF_DESPAWN);
-                    me->MonsterYell("This pathetic morons are harmless. Relive my station, dispose of them!", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("This pathetic morons are harmless. Relive my station, dispose of them!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"这个可怜的白痴是无害的。把我的车站，处理一下！", LANG_UNIVERSAL, 0);
                     me->DespawnOrUnsummon(5000);
                     break;
                 case EVENT_SIF_START_TALK:
                     events.PopEvent();
-                    me->MonsterYell("Thorim, my lord, why else would these invaders have come into your sanctum but to slay you? They must be stopped!", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("Thorim, my lord, why else would these invaders have come into your sanctum but to slay you? They must be stopped!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"大人，我的主，为什么这些入侵者会来到你的殿堂，但要杀你？他们必须停止！", LANG_UNIVERSAL, 0);
+
                     me->PlayDirectSound(SOUND_SIF_START);
                     break;
                 case EVENT_SIF_JOIN_TALK:
                     me->PlayDirectSound(SOUND_SIF_EVENT);
-                    me->MonsterYell("Impossible! Lord Thorim, I will bring your foes a frigid death!", LANG_UNIVERSAL, 0);
+                    //me->MonsterYell("Impossible! Lord Thorim, I will bring your foes a frigid death!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"不可能！托里姆大人，我会给你的敌人带来致命的死亡！", LANG_UNIVERSAL, 0);
+
                     events.PopEvent();
                     events.ScheduleEvent(EVENT_SIF_FROST_NOVA_START, 1000);
                     events.ScheduleEvent(EVENT_SIF_FROSTBOLT_VALLEY, 11000);
