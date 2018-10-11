@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -8,10 +8,14 @@
 #include "trial_of_the_champion.h"
 #include "Player.h"
 
-#define GOSSIP_START_EVENT1a "I am ready."
-#define GOSSIP_START_EVENT1b "I am ready. However I'd like to skip the pageantry."
-#define GOSSIP_START_EVENT2  "I'm ready for the next challenge."
-#define GOSSIP_START_EVENT3  "I'm ready."
+//#define GOSSIP_START_EVENT1a "I am ready."
+//#define GOSSIP_START_EVENT1b "I am ready. However I'd like to skip the pageantry."
+//#define GOSSIP_START_EVENT2  "I'm ready for the next challenge."
+//#define GOSSIP_START_EVENT3  "I'm ready."
+#define GOSSIP_START_EVENT1a u8"我准备好了."
+#define GOSSIP_START_EVENT1b u8"我准备好了,但我想跳过庆典."
+#define GOSSIP_START_EVENT2  u8"我准备好开始下一个试炼了."
+#define GOSSIP_START_EVENT3  u8"我准备好了."
 
 class npc_announcer_toc5 : public CreatureScript
 {
