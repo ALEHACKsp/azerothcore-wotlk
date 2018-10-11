@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -788,8 +788,8 @@ enum RedRidingHood
 };
 
 
-#define GOSSIP_GRANDMA          "What phat lewtz you have grandmother?"
-
+//#define GOSSIP_GRANDMA          "What phat lewtz you have grandmother?"
+#define GOSSIP_GRANDMA          u8"你要给我看什么好东西,婆婆？"
 
 
 class npc_grandmother : public CreatureScript

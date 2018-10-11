@@ -1,4 +1,4 @@
- /*
+﻿ /*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -50,16 +50,31 @@ enum Creatures
 # npc_barnesAI
 ######*/
 
-#define GOSSIP_READY        "I'm not an actor."
+//#define GOSSIP_READY        "I'm not an actor."
+//
+//#define SAY_READY           "Splendid, I'm going to get the audience ready. Break a leg!"
+//#define SAY_OZ_INTRO1       "Finally, everything is in place. Are you ready for your big stage debut?"
+//#define OZ_GOSSIP1          "I'm not an actor."
+//#define SAY_OZ_INTRO2       "Don't worry, you'll be fine. You look like a natural!"
+//#define OZ_GOSSIP2          "Ok, I'll give it a try, then."
+//
+//#define SAY_RAJ_INTRO1      "The romantic plays are really tough, but you'll do better this time. You have TALENT. Ready?"
+//#define RAJ_GOSSIP1         "I've never been more ready."
+//
+//#define OZ_GM_GOSSIP1       "[GM] Change event to EVENT_OZ"
+//#define OZ_GM_GOSSIP2       "[GM] Change event to EVENT_HOOD"
+//#define OZ_GM_GOSSIP3       "[GM] Change event to EVENT_RAJ"
 
-#define SAY_READY           "Splendid, I'm going to get the audience ready. Break a leg!"
-#define SAY_OZ_INTRO1       "Finally, everything is in place. Are you ready for your big stage debut?"
-#define OZ_GOSSIP1          "I'm not an actor."
-#define SAY_OZ_INTRO2       "Don't worry, you'll be fine. You look like a natural!"
-#define OZ_GOSSIP2          "Ok, I'll give it a try, then."
+#define GOSSIP_READY        u8"我不是演员."
 
-#define SAY_RAJ_INTRO1      "The romantic plays are really tough, but you'll do better this time. You have TALENT. Ready?"
-#define RAJ_GOSSIP1         "I've never been more ready."
+#define SAY_READY           u8"好极了，我要让观众做好准备。准备好！"
+#define SAY_OZ_INTRO1       u8"最后，一切都已经就绪。你准备好参加盛大的舞台演出了吗？"
+#define OZ_GOSSIP1          u8"我不是演员。"
+#define SAY_OZ_INTRO2       u8"别担心，你会没事的。你看起来很自然！"
+#define OZ_GOSSIP2          u8"好吧，我会试试的。"
+
+#define SAY_RAJ_INTRO1      u8"浪漫的戏剧很难，但你这次会更好。你有天赋。准备好了吗？"
+#define RAJ_GOSSIP1         u8"我准备好了."
 
 #define OZ_GM_GOSSIP1       "[GM] Change event to EVENT_OZ"
 #define OZ_GM_GOSSIP2       "[GM] Change event to EVENT_HOOD"
@@ -400,15 +415,25 @@ public:
 # npc_image_of_medivh
 ####*/
 
-#define SAY_DIALOG_MEDIVH_1         "You've got my attention, dragon. You'll find I'm not as easily scared as the villagers below."
-#define SAY_DIALOG_ARCANAGOS_2      "Your dabbling in the arcane has gone too far, Medivh. You've attracted the attention of powers beyond your understanding. You must leave Karazhan at once!"
-#define SAY_DIALOG_MEDIVH_3         "You dare challenge me at my own dwelling? Your arrogance is astounding, even for a dragon!"
-#define SAY_DIALOG_ARCANAGOS_4      "A dark power seeks to use you, Medivh! If you stay, dire days will follow. You must hurry, we don't have much time!"
-#define SAY_DIALOG_MEDIVH_5         "I do not know what you speak of, dragon... but I will not be bullied by this display of insolence. I'll leave Karazhan when it suits me!"
-#define SAY_DIALOG_ARCANAGOS_6      "You leave me no alternative. I will stop you by force if you won't listen to reason!"
-#define EMOTE_DIALOG_MEDIVH_7       "begins to cast a spell of great power, weaving his own essence into the magic."
-#define SAY_DIALOG_ARCANAGOS_8      "What have you done, wizard? This cannot be! I'm burning from... within!"
-#define SAY_DIALOG_MEDIVH_9         "He should not have angered me. I must go... recover my strength now..."
+//#define SAY_DIALOG_MEDIVH_1         "You've got my attention, dragon. You'll find I'm not as easily scared as the villagers below."
+//#define SAY_DIALOG_ARCANAGOS_2      "Your dabbling in the arcane has gone too far, Medivh. You've attracted the attention of powers beyond your understanding. You must leave Karazhan at once!"
+//#define SAY_DIALOG_MEDIVH_3         "You dare challenge me at my own dwelling? Your arrogance is astounding, even for a dragon!"
+//#define SAY_DIALOG_ARCANAGOS_4      "A dark power seeks to use you, Medivh! If you stay, dire days will follow. You must hurry, we don't have much time!"
+//#define SAY_DIALOG_MEDIVH_5         "I do not know what you speak of, dragon... but I will not be bullied by this display of insolence. I'll leave Karazhan when it suits me!"
+//#define SAY_DIALOG_ARCANAGOS_6      "You leave me no alternative. I will stop you by force if you won't listen to reason!"
+//#define EMOTE_DIALOG_MEDIVH_7       "begins to cast a spell of great power, weaving his own essence into the magic."
+//#define SAY_DIALOG_ARCANAGOS_8      "What have you done, wizard? This cannot be! I'm burning from... within!"
+//#define SAY_DIALOG_MEDIVH_9         "He should not have angered me. I must go... recover my strength now..."
+
+#define SAY_DIALOG_MEDIVH_1         u8"你引起我的注意，龙。你会发现我不像下面的村民那么容易害怕。"
+#define SAY_DIALOG_ARCANAGOS_2      u8"你在这个神秘的地方搞得太过分了，Medivh，你吸引了在你理解之外力量的注意力。你必须立刻离开卡拉然！"
+#define SAY_DIALOG_MEDIVH_3         u8"你敢在我家里挑战我吗？你的傲慢是惊人的，即使是龙！"
+#define SAY_DIALOG_ARCANAGOS_4      u8"黑暗势力想利用你，Medivh！如果你留下来，可怕的日子就会到来。你必须快点，我们没有很多时间！"
+#define SAY_DIALOG_MEDIVH_5         u8"我不知道你说什么，龙…但我不会被这种傲慢的表现吓倒。我会离开卡拉赞，当时间适合的时候！"
+#define SAY_DIALOG_ARCANAGOS_6      u8"你别无选择。如果你不听理由，我会用武力制止你！"
+#define EMOTE_DIALOG_MEDIVH_7       u8"开始施展强大的法术，把自己的精髓编织到魔法中。"
+#define SAY_DIALOG_ARCANAGOS_8      u8"你做了什么，巫师？这不是！我的身体内部在燃烧着…"
+#define SAY_DIALOG_MEDIVH_9         u8"他不该激怒我。我得去…恢复体力…"
 
 
 //static float MedivPos[4] = {-11161.49f, -1902.24f, 91.48f, 1.94f};
@@ -418,6 +443,23 @@ class npc_image_of_medivh : public CreatureScript
 {
 public:
     npc_image_of_medivh() : CreatureScript("npc_image_of_medivh") { }
+
+    //enum MedivhSay
+    //{
+    //    SAY_DIALOG_MEDIVH_1,
+    //    SAY_DIALOG_MEDIVH_3,
+    //    SAY_DIALOG_MEDIVH_5,
+    //    EMOTE_DIALOG_MEDIVH_7,
+    //    SAY_DIALOG_MEDIVH_9
+    //};
+
+    //enum ArcanagosSay
+    //{
+    //    SAY_DIALOG_ARCANAGOS_2,
+    //    SAY_DIALOG_ARCANAGOS_4,
+    //    SAY_DIALOG_ARCANAGOS_6,
+    //    SAY_DIALOG_ARCANAGOS_8,
+    //};
 
     CreatureAI* GetAI(Creature* creature) const
     {
@@ -472,7 +514,10 @@ public:
                 me->DespawnOrUnsummon();
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void EnterCombat(Unit* /*who*/)
+        {
+            
+        }
 
         uint32 NextStep(uint32 Step)
         {
