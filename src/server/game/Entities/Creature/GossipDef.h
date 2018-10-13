@@ -14,7 +14,8 @@
 class WorldSession;
 
 #define GOSSIP_MAX_MENU_ITEMS               32
-#define DEFAULT_GOSSIP_MESSAGE              0xffffff
+//#define DEFAULT_GOSSIP_MESSAGE              0xffffff
+#define DEFAULT_GOSSIP_MESSAGE              328
 
 enum Gossip_Option
 {
