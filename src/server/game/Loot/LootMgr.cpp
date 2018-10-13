@@ -265,7 +265,11 @@ void LootStore::ReportUnusedIds(LootIdSet const& lootIdSet) const
 {
     // all still listed ids isn't referenced
     for (LootIdSet::const_iterator itr = lootIdSet.begin(); itr != lootIdSet.end(); ++itr)
+    {
+        if (*itr >= 90 && *itr <= 270) // fuck this shit
+            continue;
         sLog->outErrorDb("Table '%s' entry %d isn't %s and not referenced from loot, and then useless.", GetName(), *itr, GetEntryName());
+    }
 }
 
 void LootStore::ReportNotExistedId(uint32 id) const

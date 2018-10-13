@@ -90,7 +90,7 @@ bool AchievementCriteriaData::IsValid(AchievementCriteriaEntry const* criteria)
         case ACHIEVEMENT_CRITERIA_TYPE_ON_LOGIN:
             break;
         default:
-            if (dataType != ACHIEVEMENT_CRITERIA_DATA_TYPE_SCRIPT)
+            if (dataType != ACHIEVEMENT_CRITERIA_DATA_TYPE_SCRIPT && criteria->requiredType != 73 && criteria->requiredType != 19)//fuck the shit
             {
                 sLog->outErrorDb("Table `achievement_criteria_data` has data for non-supported criteria type (Entry: %u Type: %u), ignored.", criteria->ID, criteria->requiredType);
                 return false;
