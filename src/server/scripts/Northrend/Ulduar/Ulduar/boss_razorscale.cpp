@@ -71,13 +71,13 @@
 //#define TEXT_GROUNDED_PERMANENTLY           "Razorscale grounded permanently!"
 
 #define TEXT_GOSSIP_ACTION                  u8"我们准备好了!"
-#define TEXT_EE_AGGRO                       u8"给我们一点时间来准备建造塔楼。"
-#define TEXT_EE_MOVE_OUT                    u8"准备搬出去，让那些矮人远离我们！"
+#define TEXT_EE_AGGRO                       u8"给我们一点时间来准备建造鱼叉炮。"
+#define TEXT_EE_MOVE_OUT                    u8"我们来了，让那些矮人远离我们！"
 #define TEXT_EE_FIRES_OUT                   u8"开火！让我们重建那些塔！"
 
-#define TEXT_TURRET_READY                   u8"哈伯特塔已经可以使用！"
-#define TEXT_DEEP_BREATH                    u8"Razorscale 深呼。"
-#define TEXT_GROUNDED_PERMANENTLY           u8"Razorscale 遁地！"
+#define TEXT_TURRET_READY                   u8"鱼叉炮已经可以使用！"
+#define TEXT_DEEP_BREATH                    u8"锋鳞 深呼了一口气。"
+#define TEXT_GROUNDED_PERMANENTLY           u8"锋鳞 被永远固定到了地上！"
 
 
 #define CORDS_GROUND                        588.0f, -166.0f, 391.1f
