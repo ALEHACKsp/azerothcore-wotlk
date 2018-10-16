@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -189,6 +189,16 @@ void ChatHandler::SendGlobalSysMessage(const char *str)
     }
 
     free(buf);
+}
+
+void ChatHandler::PSendGlobalSysMessage(const char *format, ...)
+{
+    va_list ap;
+    char str[2048];
+    va_start(ap, format);
+    vsnprintf(str, 2048, format, ap);
+    va_end(ap);
+    SendGlobalSysMessage(str);
 }
 
 void ChatHandler::SendGlobalGMSysMessage(const char *str)

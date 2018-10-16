@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -131,8 +131,7 @@ class boss_magtheridon : public CreatureScript
                 events.ScheduleEvent(EVENT_EMOTE2, 60000);
                 events.ScheduleEvent(EVENT_EMOTE3, 120000);
                 events.ScheduleEvent(EVENT_ENTER_COMBAT, 123000);
-
-           }
+            }
 
             void UpdateAI(uint32 diff)
             {
