@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -81,7 +81,6 @@ void GossipMenu::AddMenuItem(uint32 menuId, uint32 menuItemId, uint32 sender, ui
         /// Store texts for localization.
         std::string strOptionText = itr->second.OptionText;
         std::string strBoxText = itr->second.BoxText;
-
         /// Check need of localization.
         if (GetLocale() != DEFAULT_LOCALE)
             /// Find localizations from database.

@@ -1200,11 +1200,12 @@ class npc_lore_keeper_of_norgannon_ulduar : public CreatureScript
 public:
     npc_lore_keeper_of_norgannon_ulduar() : CreatureScript("npc_lore_keeper_of_norgannon_ulduar") { }
 
+    //10366 10477 gossip item
     bool OnGossipHello(Player* player, Creature* creature)
     {
         if (creature->GetInstanceScript() && creature->GetInstanceScript()->GetData(TYPE_LEVIATHAN) == NOT_STARTED && !creature->AI()->GetData(DATA_EVENT_STARTED))
             /*player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Activate secondary defensive systems.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);*/
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, u8"激活第二防卫系统", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, u8"激活次级防卫系统(困难模式)", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         player->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
         return true;
@@ -1216,6 +1217,7 @@ public:
         {
             case GOSSIP_ACTION_INFO_DEF+1:
                 //creature->MonsterSay("Activating secondary defensive systems will result in the extermination of unauthorized life forms via orbital emplacements. You are an unauthorized life form.", LANG_UNIVERSAL, 0);
+                creature->AI()->Talk(5);
                 player->PlayerTalkClass->ClearMenus();
                 //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Confirmed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, u8"确认.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
@@ -1223,6 +1225,7 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
                 //creature->MonsterSay("Security override permitted. Secondary defensive systems activated. Backup deactivation for secondary systems can be accessed via individual generators located on the concourse. ", LANG_UNIVERSAL, 0);
+                creature->AI()->Talk(6);
                 creature->AI()->DoAction(ACTION_START_NORGANNON_EVENT);
 
                 player->CLOSE_GOSSIP_MENU();
@@ -1278,83 +1281,19 @@ public:
                 c->MonsterSay(text.c_str(), LANG_UNIVERSAL, 0);
         }
 
-        void UpdateAI(uint32 diff)
+        void Say(uint32 textID, bool self)
         {
-            if (_running)
-            {
-                if (_checkTimer != 0)
-                {
-                    _checkTimer -= diff;
-                    if (_checkTimer < 0 )
-                        _checkTimer = 0;
-                }
-                else
-                    switch (_step)
-                    {
-                        case 0:
-                            NextStep(14000);
-                            break;
-                        case 1:
-                            //Say("I heard a story or two of a Lore Keeper in Uldaman that fit your description. Do you serve a similar purpose?", false);
-                            NextStep(10000);
-                            break;
-                        case 2:
-                            //Say("I was constructed to serve as a repository for essential information regarding this complex. My primary functions include communicating the status of the frontal defense systems and assessing the status of the entity that this complex was built to imprison.", true);
-                            NextStep(14000);
-                            break;
-                        case 3:
-                            //Say("Frontal defense systems? Is there something I should let Brann know before he has anyone attempt to enter the complex?", false);
-                            NextStep(11000);
-                            break;
-                        case 4:
-                            //Say("Access to the interior of the complex is currently restricted. Primary defensive emplacements are active. Secondary systems are currently non-active.", true);
-                            NextStep(12000);
-                            break;
-                        case 5:
-                            //Say("Can you detail the nature of these defense systems?", false);
-                            NextStep(8000);
-                            break;
-                        case 6:
-                            //Say("Compromise of complex detected, security override enabled - query permitted.", true);
-                            NextStep(7000);
-                            break;
-                        case 7:
-                            //Say("Primary defensive emplacements consist of iron constructs and Storm Beacons, which will generate additional constructs as necessary. Secondary systems consist of orbital defense emplacements.", true);
-                            NextStep(11000);
-                            break;
-                        case 8:
-                            //Say("Got it. At least we don't have to deal with those orbital emplacements.", false);
-                            NextStep(7000);
-                            break;
-                        case 9:
-                            //Say("Rhydian, make sure you let Brann and Archmage Pentarus know about those defenses immediately.", false);
-                            NextStep(7000);
-                            break;
-                        case 10:
-                            if (Creature* c = me->FindNearestCreature(NPC_ARCHMAGE_RHYDIAN, 15.0f))
-                            {
-                                c->MonsterTextEmote("Archmage Rhydian Nods.", 0, false);
-                                c->GetMotionMaster()->MovePoint(0, -720.6f, -61.7f, 429.84f);
-                            }
-                            //Say("And you mentioned an imprisoned entity? What is the nature of this entity and what is its status?", false);
-                            NextStep(6000);
-                            break;
-                        case 11:
-                            //Say("Entity designate: Yogg-Saron. Security has been compromised. Prison operational status unknown. Unable to contact Watchers for notification purposes.", true);
-                            NextStep(9000);
-                            break;
-                        case 12:
-                            //Say("Yogg-Saron is here? It sounds like we really will have our hands full then.", false);
-                            
-                            if (Creature* c = me->FindNearestCreature(NPC_START_BRANN_BRONZEBEARD, 110.0f, true) )
-                                c->AI()->DoAction(ACTION_START_NORGANNON_BRANN);
+            if (self)
+                ((CreatureAI*)me->GetAI())->Talk(textID);
+            else if (Creature* c = ObjectAccessor::GetCreature(*me, _dellorahGUID))
+                ((CreatureAI*)c->GetAI())->Talk(textID);
+        }
 
-                            _running = false;
-                            _checkTimer = 0;
-                            _step = 0;
-                            _dellorahGUID = 0;
-                            return;
-                    }
+        void MoveInLineOfSight_Safe(Unit* who)
+        {
+            if (Creature* c = me->FindNearestCreature(NPC_ARCHMAGE_RHYDIAN, 15.0f))
+            {
+                c->GetMotionMaster()->MovePoint(0, -720.6f, -61.7f, 429.84f);
             }
         }
 
@@ -1369,8 +1308,13 @@ public:
                     _dellorahGUID = cr->GetGUID();
 
                 _eventStarted = true;
-                _running = true;
+                //_running = true;
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+
+                if (Creature* c = me->FindNearestCreature(NPC_START_BRANN_BRONZEBEARD, 110.0f, true))
+                    if(c->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
+                        c->AI()->DoAction(ACTION_START_NORGANNON_BRANN);
+
             }
         }
     };
@@ -1381,10 +1325,21 @@ class npc_brann_ulduar : public CreatureScript
 public:
     npc_brann_ulduar() : CreatureScript("npc_brann_ulduar") { }
 
-    bool OnGossipHello(Player*  /*player*/, Creature* creature)
+    bool OnGossipHello(Player*  player, Creature* creature)
     {
+        //14369   10355
         if (creature->GetInstanceScript() && creature->GetInstanceScript()->GetData(TYPE_LEVIATHAN) == NOT_STARTED && !creature->AI()->GetData(DATA_EVENT_STARTED))
-            creature->AI()->DoAction(ACTION_START_BRANN_EVENT);
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, u8"我们准备好了，进攻吧！", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+            SendGossipMenuFor(player, 14369, creature);
+        }
+        return true;
+    }
+
+    bool OnGossipSelect(Player* player, Creature* creature, uint32  /*uiSender*/, uint32 uiAction)
+    {
+        CloseGossipMenuFor(player);
+        creature->AI()->DoAction(ACTION_START_BRANN_EVENT);
         return true;
     }
 
@@ -2299,7 +2254,6 @@ class spell_shield_generator : public SpellScriptLoader
             return new spell_shield_generator_AuraScript();
         }
 };
-
 
 class spell_demolisher_ride_vehicle : public SpellScriptLoader
 {
