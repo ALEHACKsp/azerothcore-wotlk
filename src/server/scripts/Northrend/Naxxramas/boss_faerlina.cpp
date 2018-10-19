@@ -92,7 +92,7 @@ public:
             BossAI::EnterCombat(who);
             summons.DoZoneInCombat();
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_POISON_BOLT, urand(12000,15000));
+            events.ScheduleEvent(EVENT_SPELL_POISON_BOLT, urand(10000,15000));
             events.ScheduleEvent(EVENT_SPELL_RAIN_OF_FIRE, urand(6000,18000));
             events.ScheduleEvent(EVENT_SPELL_FRENZY, urand(60000, 80000), 1);
             events.SetPhase(1);
@@ -141,18 +141,23 @@ public:
                 case EVENT_SPELL_POISON_BOLT:
                     if (!me->HasAura(SPELL_WIDOWS_EMBRACE))
                         me->CastCustomSpell(RAID_MODE(SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25), SPELLVALUE_MAX_TARGETS, 3, me, false);
-                    events.RepeatEvent(14000);
+                    events.RepeatEvent(urand(8000, 15000));
                     break;
                 case EVENT_SPELL_RAIN_OF_FIRE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, RAID_MODE(SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25), false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(urand(6000, 18000));
                     break;
                 case EVENT_SPELL_FRENZY:
                     //me->MonsterTextEmote("%s goes into a frenzy!", 0, true);
-                    me->MonsterTextEmote(u8"%s 进入了狂乱!", 0, true);
-                    me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
-                    events.RepeatEvent(70000);
+                    if (Aura* widowsEmbrace = me->GetAura(SPELL_WIDOWS_EMBRACE))
+                        events.ScheduleEvent(EVENT_SPELL_FRENZY, widowsEmbrace->GetDuration() + 1,1);
+                    else
+                    {
+                        me->MonsterTextEmote(u8"%s 进入了狂乱!", 0, true);
+                        me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
+                        events.RepeatEvent(urand(60000, 80000));
+                    }
                     break;
             }
 
