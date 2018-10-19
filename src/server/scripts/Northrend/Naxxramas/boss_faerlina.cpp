@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -94,7 +94,7 @@ public:
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_SPELL_POISON_BOLT, urand(12000,15000));
             events.ScheduleEvent(EVENT_SPELL_RAIN_OF_FIRE, urand(6000,18000));
-            events.ScheduleEvent(EVENT_SPELL_FRENZY, urand(60000,80000), 1);
+            events.ScheduleEvent(EVENT_SPELL_FRENZY, urand(60000, 80000), 1);
             events.SetPhase(1);
         }
 
@@ -149,7 +149,8 @@ public:
                     events.RepeatEvent(12000);
                     break;
                 case EVENT_SPELL_FRENZY:
-                    me->MonsterTextEmote("%s goes into a frenzy!", 0, true);
+                    //me->MonsterTextEmote("%s goes into a frenzy!", 0, true);
+                    me->MonsterTextEmote(u8"%s 进入了狂乱!", 0, true);
                     me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
                     events.RepeatEvent(70000);
                     break;
@@ -162,7 +163,8 @@ public:
         {
             if (spell->Id == SPELL_WIDOWS_EMBRACE)
             {
-                me->MonsterTextEmote("%s is affected by Widow's Embrace!", 0, true);
+                me->MonsterTextEmote("%s 被黑女巫的拥抱影响了!", 0, true);
+                //me->MonsterTextEmote("%s is affected by Widow's Embrace!", 0, true);
                 if (me->HasAura(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25)))
                 {
                     me->RemoveAurasDueToSpell(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25));

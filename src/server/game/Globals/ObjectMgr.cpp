@@ -4582,6 +4582,15 @@ void ObjectMgr::LoadScripts(ScriptsType type)
         tmp.Raw.fData[2] = fields[8].GetFloat();
         tmp.Raw.fData[3] = fields[9].GetFloat();
 
+        uint32 deBugID;
+        uint32 deBugEffect;
+        if (isSpellScriptTable)
+        {
+            deBugID = fields[0].GetUInt32();
+            deBugEffect = fields[10].GetUInt8();
+        }
+
+
         // generic command args check
         switch (tmp.command)
         {
@@ -4794,8 +4803,8 @@ void ObjectMgr::LoadScripts(ScriptsType type)
             {
                 if (!sSpellMgr->GetSpellInfo(tmp.CastSpell.SpellID))
                 {
-                    sLog->outErrorDb("Table `%s` using non-existent spell (id: %u) in SCRIPT_COMMAND_CAST_SPELL for script id %u",
-                        tableName.c_str(), tmp.CastSpell.SpellID, tmp.id);
+                    sLog->outErrorDb("Table `%s` using non-existent spell (id: %u) in SCRIPT_COMMAND_CAST_SPELL for script id %u effectIndex %u",
+                        tableName.c_str(), tmp.CastSpell.SpellID, deBugID,deBugEffect);
                     continue;
                 }
                 if (tmp.CastSpell.Flags > 4)                      // targeting type
