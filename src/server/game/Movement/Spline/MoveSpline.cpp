@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -237,6 +237,12 @@ MoveSpline::UpdateResult MoveSpline::_updateState(int32& ms_time_diff)
     UpdateResult result = Result_None;
 
     int32 minimal_diff = std::min(ms_time_diff, segment_time_elapsed());
+    if (minimal_diff <= 0)
+    {
+        minimal_diff = 0;
+        return Result_Arrived;
+    }
+
     ASSERT(minimal_diff >= 0);
     time_passed += minimal_diff;
     ms_time_diff -= minimal_diff;
