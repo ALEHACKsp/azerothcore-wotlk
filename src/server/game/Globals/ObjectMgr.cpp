@@ -8576,32 +8576,32 @@ bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item, bool persist /*= tru
     return true;
 }
 
-bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 maxcount, uint32 incrtime, uint32 ExtendedCost, Player* player, std::set<uint32>* skip_vendors, uint32 ORnpcflag) const
+bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 maxcount, uint32 incrtime, uint32 ExtendedCost, Player* player, std::set<uint32>* /*skip_vendors*/, uint32 /*ORnpcflag*/) const
 {
-    CreatureTemplate const* cInfo = sObjectMgr->GetCreatureTemplate(vendor_entry);
-    if (!cInfo)
-    {
-        if (player)
-            ChatHandler(player->GetSession()).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
-        else
-            sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not existed creature template (Entry: %u), ignore", vendor_entry);
-        return false;
-    }
+    //CreatureTemplate const* cInfo = sObjectMgr->GetCreatureTemplate(vendor_entry);
+    //if (!cInfo)
+    //{
+    //    if (player)
+    //        ChatHandler(player->GetSession()).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
+    //    else
+    //        sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not existed creature template (Entry: %u), ignore", vendor_entry);
+    //    return false;
+    //}
 
-    if (!((cInfo->npcflag | ORnpcflag) & UNIT_NPC_FLAG_VENDOR))
-    {
-        if (!skip_vendors || skip_vendors->count(vendor_entry) == 0)
-        {
-            if (player)
-                ChatHandler(player->GetSession()).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
-            else
-                sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not creature template (Entry: %u) without vendor flag, ignore", vendor_entry);
+    //if (!((cInfo->npcflag | ORnpcflag) & UNIT_NPC_FLAG_VENDOR))
+    //{
+    //    if (!skip_vendors || skip_vendors->count(vendor_entry) == 0)
+    //    {
+    //        if (player)
+    //            ChatHandler(player->GetSession()).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
+    //        else
+    //            sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not creature template (Entry: %u) without vendor flag, ignore", vendor_entry);
 
-            if (skip_vendors)
-                skip_vendors->insert(vendor_entry);
-        }
-        return false;
-    }
+    //        if (skip_vendors)
+    //            skip_vendors->insert(vendor_entry);
+    //    }
+    //    return false;
+    //}
 
     if (!sObjectMgr->GetItemTemplate(item_id))
     {
