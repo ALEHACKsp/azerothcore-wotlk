@@ -397,7 +397,8 @@ public:
                     events.PopEvent();
                     break;
                 case EVENT_SUMMON_GUARDIAN_OF_ICECROWN:
-                    me->MonsterTextEmote("A Guardian of Icecrown enter the fight!", 0, true);
+                    //me->MonsterTextEmote("A Guardian of Icecrown enter the fight!", 0, true);
+                    me->MonsterTextEmote(u8"一个寒冰皇冠的守卫进入了战斗!", 0, true);
                     if (Creature* cr = me->SummonCreature(NPC_GUARDIAN_OF_ICECROWN, SummonPositions[RAND(0, 1, 3, 4)]))
                         cr->AI()->AttackStart(me->GetVictim());
 

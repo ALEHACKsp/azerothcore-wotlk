@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -130,15 +130,15 @@ public:
             {
                 case 0:
                     DoPlaySoundToSet(me, SOUND_AGGRO_1);
-                    me->MonsterYell("Hah hah, I'm just getting warmed up!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"这个没翻译你们凑合下.Hah hah, I'm just getting warmed up!", LANG_UNIVERSAL, 0);
                     break;
                 case 1:
                     DoPlaySoundToSet(me, SOUND_AGGRO_2);
-                    me->MonsterYell("Stand and fight!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"这个没翻译你们凑合下.Stand and fight!", LANG_UNIVERSAL, 0);
                     break;
                 case 2:
                     DoPlaySoundToSet(me, SOUND_AGGRO_3);
-                    me->MonsterYell("Show me what you've got!", LANG_UNIVERSAL, 0);
+                    me->MonsterYell(u8"这个没翻译你们凑合下.Show me what you've got!", LANG_UNIVERSAL, 0);
                     break;
             }
 

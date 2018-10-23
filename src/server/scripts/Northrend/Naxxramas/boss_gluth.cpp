@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -79,7 +79,8 @@ public:
             if ((!me->GetVictim() || me->GetVictim()->GetEntry() != NPC_ZOMBIE_CHOW) && who->GetEntry() == NPC_ZOMBIE_CHOW && me->IsWithinDistInMap(who, 6.5f))
             {
                 SetGazeOn(who);
-                me->MonsterTextEmote("%s spots a nearby zombie to devour!", 0, false);
+                /*me->MonsterTextEmote("%s spots a nearby zombie to devour!", 0, false);*/
+                me->MonsterTextEmote(u8"%s 正在寻找可以进食的僵尸!", 0, false);
             }
             else
                 ScriptedAI::MoveInLineOfSight(who);
@@ -159,7 +160,8 @@ public:
                     events.PopEvent();
                     break;
                 case EVENT_SPELL_ENRAGE:
-                    me->MonsterTextEmote("Gluth becomes enraged!", 0, true);
+                    //me->MonsterTextEmote("Gluth becomes enraged!", 0, true);
+                    me->MonsterTextEmote(u8"Gluth 被激怒了!", 0, true);
                     me->CastSpell(me, RAID_MODE(SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
                     events.RepeatEvent(30000);
                     break;
@@ -168,7 +170,7 @@ public:
                     events.RepeatEvent(10000);
                     break;
                 case EVENT_SPELL_DECIMATE:
-                    me->MonsterTextEmote("Gluth decimates all nearby flesh!", 0, true);
+                    me->MonsterTextEmote(u8"Gluth 开始大屠杀!", 0, true);
                     me->CastSpell(me, RAID_MODE(SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
                     events.RepeatEvent(105000);
                     break;
@@ -195,7 +197,8 @@ public:
                     if (me->GetVictim()->GetEntry() == NPC_ZOMBIE_CHOW && me->IsWithinMeleeRange(me->GetVictim()))
                     {
                         me->CastCustomSpell(SPELL_CHOW_SEARCHER, SPELLVALUE_RADIUS_MOD, 20000, me, true);
-                        me->MonsterTextEmote("%s devour all nearby zombies!", 0, false);
+                        //me->MonsterTextEmote("%s devour all nearby zombies!", 0, false);
+                        me->MonsterTextEmote("%s 吃掉了所有周围的僵尸!", 0, false);
                         return; // leave it to skip DoMeleeAttackIfReady
                     }
                     break;

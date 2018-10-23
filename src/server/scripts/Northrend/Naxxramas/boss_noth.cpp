@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 */
 
@@ -189,7 +189,8 @@ public:
                     events.RepeatEvent(25000);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
-                    me->MonsterTextEmote("Noth the Plaguebringer summons forth Skeletal Warriors!", 0, true);
+                    //me->MonsterTextEmote("Noth the Plaguebringer summons forth Skeletal Warriors!", 0, true);
+                    me->MonsterTextEmote(u8"%s 召唤了四个骷髅战士!", 0, true);
                     Talk(SAY_SUMMON);
                     events.RepeatEvent(25000);
                     events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_REAL, 4000);
@@ -200,21 +201,24 @@ public:
                     events.PopEvent();
                     break;
                 case EVENT_MOVE_TO_BALCONY:
-                    me->MonsterTextEmote("%s teleports to the balcony above!", 0, true);
+                    //me->MonsterTextEmote("%s teleports to the balcony above!", 0, true);
+                    me->MonsterTextEmote(u8"%s 传送到了露台上方!", 0, true);
                     me->CastSpell(me, SPELL_TELEPORT, true);
                     StartBalconyPhase();
                     //events.PopEvent(); events.Reset()!!
                     break;
                 case EVENT_SPELL_BLINK:
                     DoResetThreat();
-                    me->MonsterTextEmote("%s blinks away!", 0, true);
+                    /*me->MonsterTextEmote("%s blinks away!", 0, true);*/
+                    me->MonsterTextEmote(u8"%s 闪现!", 0, true);
                     me->CastSpell(me, RAID_MODE(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
                     me->CastSpell(me, SPELL_BLINK, true);
                     events.RepeatEvent(30000);
                     break;
                 // BALCONY
                 case EVENT_BALCONY_SUMMON_ANNOUNCE:
-                    me->MonsterTextEmote("%s raises more skeletons!", 0, true);
+                    /*me->MonsterTextEmote("%s raises more skeletons!", 0, true);*/
+                    me->MonsterTextEmote(u8"%s 更多的骷髅出现了!", 0, true);
                     events.RepeatEvent(25000);
                     events.ScheduleEvent(EVENT_BALCONY_SUMMON_REAL, 4000);
                     break;
@@ -232,7 +236,8 @@ public:
                     events.PopEvent();
                     break;
                 case EVENT_MOVE_TO_GROUND:
-                    me->MonsterTextEmote("%s teleports back into the battle!", 0, true);
+                    //me->MonsterTextEmote("%s teleports back into the battle!", 0, true);
+                    me->MonsterTextEmote(u8"%s 传送回了战场!", 0, true);
                     StartGroundPhase();
                     me->NearTeleportTo(nothPosition.GetPositionX(), nothPosition.GetPositionY(), nothPosition.GetPositionZ(), nothPosition.GetOrientation(), true);
                     break;
