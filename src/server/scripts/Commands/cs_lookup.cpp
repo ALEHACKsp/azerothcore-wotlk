@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -613,8 +613,8 @@ public:
         if (!*args)
             return false;
 
-        // can be nullptr at console call
-        Player* target = handler->getSelectedPlayer();
+        // can be NULL at console call
+        Player* target = handler->getSelectedPlayerOrSelf();
 
         std::string namePart = args;
         std::wstring wNamePart;
@@ -629,12 +629,58 @@ public:
         uint32 count = 0;
         uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
 
-        ObjectMgr::QuestMap const& qTemplates = sObjectMgr->GetQuestTemplates();
-        for (ObjectMgr::QuestMap::const_iterator iter = qTemplates.begin(); iter != qTemplates.end(); ++iter)
+        ObjectMgr::QuestMap const& questTemplates = sObjectMgr->GetQuestTemplates();
+        for (auto const& questTemplatePair : questTemplates)
         {
-            Quest* qInfo = iter->second;
+            uint8 localeIndex = handler->GetSessionDbLocaleIndex();
+            if (QuestLocale const* questLocale = sObjectMgr->GetQuestLocale(questTemplatePair.first))
+            {
+                if (questLocale->Title.size() > localeIndex && !questLocale->Title[localeIndex].empty())
+                {
+                    std::string const& title = questLocale->Title[localeIndex];
 
-            std::string title = qInfo->GetTitle();
+                    if (Utf8FitTo(title, wNamePart))
+                    {
+                        if (maxResults && count++ == maxResults)
+                        {
+                            handler->PSendSysMessage(LANG_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
+                            return true;
+                        }
+
+                        char const* statusStr = "";
+
+                        if (target)
+                        {
+                            switch (target->GetQuestStatus(questTemplatePair.first))
+                            {
+                            case QUEST_STATUS_COMPLETE:
+                                statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_COMPLETE);
+                                break;
+                            case QUEST_STATUS_INCOMPLETE:
+                                statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_ACTIVE);
+                                break;
+                            case QUEST_STATUS_REWARDED:
+                                statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_REWARDED);
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+
+                        if (handler->GetSession())
+                            handler->PSendSysMessage(LANG_QUEST_LIST_CHAT, questTemplatePair.first, questTemplatePair.first, questTemplatePair.second->GetQuestLevel(), title.c_str(), statusStr);
+                        else
+                            handler->PSendSysMessage(LANG_QUEST_LIST_CONSOLE, questTemplatePair.first, title.c_str(), statusStr);
+
+                        if (!found)
+                            found = true;
+
+                        continue;
+                    }
+                }
+            }
+
+            std::string const& title = questTemplatePair.second->GetTitle();
             if (title.empty())
                 continue;
 
@@ -650,28 +696,26 @@ public:
 
                 if (target)
                 {
-                    QuestStatus status = target->GetQuestStatus(qInfo->GetQuestId());
-
-                    switch (status)
+                    switch (target->GetQuestStatus(questTemplatePair.first))
                     {
-                        case QUEST_STATUS_COMPLETE:
-                            statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_COMPLETE);
-                            break;
-                        case QUEST_STATUS_INCOMPLETE:
-                            statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_ACTIVE);
-                            break;
-                        case QUEST_STATUS_REWARDED:
-                            statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_REWARDED);
-                            break;
-                        default:
-                            break;
+                    case QUEST_STATUS_COMPLETE:
+                        statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_COMPLETE);
+                        break;
+                    case QUEST_STATUS_INCOMPLETE:
+                        statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_ACTIVE);
+                        break;
+                    case QUEST_STATUS_REWARDED:
+                        statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_REWARDED);
+                        break;
+                    default:
+                        break;
                     }
                 }
 
                 if (handler->GetSession())
-                    handler->PSendSysMessage(LANG_QUEST_LIST_CHAT, qInfo->GetQuestId(), qInfo->GetQuestId(), qInfo->GetQuestLevel(), title.c_str(), statusStr);
+                    handler->PSendSysMessage(LANG_QUEST_LIST_CHAT, questTemplatePair.first, questTemplatePair.first, questTemplatePair.second->GetQuestLevel(), title.c_str(), statusStr);
                 else
-                    handler->PSendSysMessage(LANG_QUEST_LIST_CONSOLE, qInfo->GetQuestId(), title.c_str(), statusStr);
+                    handler->PSendSysMessage(LANG_QUEST_LIST_CONSOLE, questTemplatePair.first, title.c_str(), statusStr);
 
                 if (!found)
                     found = true;
