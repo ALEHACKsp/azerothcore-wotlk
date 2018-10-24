@@ -15087,6 +15087,9 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
 
                 // Should show another Gossip text with "Congratulations..."
                 PlayerTalkClass->SendCloseGossip();
+
+                // DUALSPEC Achievement
+                this->CompletedAchievement(sAchievementStore.LookupEntry(2716));
             }
             break;
         case GOSSIP_OPTION_UNLEARNTALENTS:
