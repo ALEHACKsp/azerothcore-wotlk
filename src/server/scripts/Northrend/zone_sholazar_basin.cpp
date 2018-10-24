@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -286,6 +286,7 @@ quest Still At It (12644)
 #define ACTION_ORANGE 4
 #define ACTION_PAPAYA 5
 #define NPC_WANTS_BANANAS 28537
+#define NPC_MCMANUS 28566
 
 class npc_still_at_it_trigger : public CreatureScript
 {
@@ -309,8 +310,9 @@ public:
         uint8 currentstep;
         uint8 expectedaction;
         uint8 playeraction;
+        Creature* mcmanus;
 
-        npc_still_at_it_triggerAI(Creature* pCreature) : NullCreatureAI(pCreature) {}
+        npc_still_at_it_triggerAI(Creature* pCreature) : NullCreatureAI(pCreature) { }
         
         void Reset()
         {
@@ -341,10 +343,12 @@ public:
 
         void Start()
         {
+            mcmanus = me->FindNearestCreature(NPC_MCMANUS, 20.0f, true);
             timer = 5000;
             running = true;
             stepcount = urand(5,10);
-            Say(MCM_TEXT_START);
+            //Say(MCM_TEXT_START);
+            mcmanus->AI()->Talk(0);
         }
 
         void CheckAction(uint8 a, uint64 guid)
@@ -360,16 +364,18 @@ public:
                 if (Creature* th = ObjectAccessor::GetCreature(*me, thunderbrewGUID))
                     th->HandleEmoteCommand(EMOTE_ONESHOT_CHEER_NO_SHEATHE);
 
-                switch (s)
-                {
-                    case 0: Say(MCM_TEXT_CORRECT1); break;
-                    case 1: Say(MCM_TEXT_CORRECT2); break;
-                    default:Say(MCM_TEXT_CORRECT3); break;
-                }
+                //switch (s)
+                //{
+                //    case 0: Say(MCM_TEXT_CORRECT1); break;
+                //    case 1: Say(MCM_TEXT_CORRECT2); break;
+                //    default:Say(MCM_TEXT_CORRECT3); break;
+                //}
+                mcmanus->AI()->Talk(6);
 
                 if (currentstep >= stepcount)
                 {
-                    Say(MCM_TEXT_SUCCESS1);
+                    //Say(MCM_TEXT_SUCCESS1);
+                    mcmanus->AI()->Talk(6);
                     success = true;
                     timer = 3000;
                 }
@@ -381,7 +387,8 @@ public:
             }
             else
             {
-                Say(MCM_TEXT_FAILED);
+                mcmanus->AI()->Talk(7);
+                //Say(MCM_TEXT_FAILED);
                 Reset();
             }
         }
@@ -414,13 +421,15 @@ public:
                 }
                 else if ( success)
                 {
-                    Say(MCM_TEXT_SUCCESS2);
+                    mcmanus->AI()->Talk(8);
+                    //Say(MCM_TEXT_SUCCESS2);
                     me->SummonGameObject(190643, 5546.55f, 5768.0f, -78.03f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 60000);
                     Reset();
                 }
                 else if (expectedaction != 0) // didn't make it in 10 seconds
                 {
-                    Say(MCM_TEXT_FAILED);
+                    mcmanus->AI()->Talk(7);
+                    //Say(MCM_TEXT_FAILED);
                     Reset();
                 }
                 else // it's time to rand next move
@@ -428,11 +437,26 @@ public:
                     expectedaction = urand(1,5);
                     switch (expectedaction)
                     {
-                        case 1: Say(MCM_TEXT_PRESSURE); break;
-                        case 2: Say(MCM_TEXT_HEAT); break;
-                        case 3: Say(MCM_TEXT_BANANA); break;
-                        case 4: Say(MCM_TEXT_ORANGE); break;
-                        case 5: Say(MCM_TEXT_PAPAYA); break;
+                        case 1:
+                            //Say(MCM_TEXT_PRESSURE);
+                            mcmanus->AI()->Talk(4);
+                            break;
+                        case 2:
+                            //Say(MCM_TEXT_HEAT);
+                            mcmanus->AI()->Talk(5);
+                            break;
+                        case 3:
+                            mcmanus->AI()->Talk(3);
+                            //Say(MCM_TEXT_BANANA);
+                            break;
+                        case 4:
+                            mcmanus->AI()->Talk(1);
+                            //Say(MCM_TEXT_ORANGE);
+                            break;
+                        case 5:
+                            mcmanus->AI()->Talk(2);
+                            //Say(MCM_TEXT_PAPAYA);
+                            break;
                     }
                     timer = 10000;
                 }
@@ -455,7 +479,8 @@ public:
             player->PrepareQuestMenu(creature->GetGUID());
 
         if (player->GetQuestStatus(12644) == QUEST_STATUS_INCOMPLETE)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to start the distillation, uh, Tipsy.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to start the distillation, uh, Tipsy.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, u8"我准备好开始蒸馏作业了,美味!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
         return true;
