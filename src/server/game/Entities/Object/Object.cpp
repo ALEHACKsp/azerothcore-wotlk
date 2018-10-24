@@ -1807,10 +1807,10 @@ bool WorldObject::CanDetectStealthOf(WorldObject const* obj, bool checkAlert) co
             visibilityRange += (visibilityRange * 0.08f) + 1.5f;
 
 
-        Unit const* tunit = obj->ToUnit();
+        Unit const* targetUnit = obj->ToUnit();
 
         // If checking for alert, and creature's visibility range is greater than aggro distance, No alert
-        if (checkAlert && unit && unit->ToCreature() && visibilityRange >= unit->ToCreature()->GetAttackDistance(tunit) + unit->ToCreature()->m_CombatDistance)
+        if (checkAlert && unit && unit->ToCreature() && visibilityRange >= unit->ToCreature()->GetAttackDistance(targetUnit) + unit->ToCreature()->m_CombatDistance)
             return false;
 
         if (distance > visibilityRange)
