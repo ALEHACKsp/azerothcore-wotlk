@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -15,6 +15,63 @@
 #include "Player.h"
 #include "WorldSession.h"
 #include "WaypointManager.h"
+
+enum sparksocket_aa_cannon_spell
+{
+    SPELL_HOSTILE_AIRSPACE = 54433
+};
+
+enum sparksocket_aa_cannon_quest
+{
+    QUEST_JUST_AROUND_THE_CORNER = 12819
+};
+
+class npc_sparksocket_aa_cannon : public CreatureScript
+{
+public:
+    npc_sparksocket_aa_cannon() : CreatureScript("npc_sparksocket_aa_cannon") { }
+
+    struct npc_sparksocket_aa_cannonAI : public ScriptedAI
+    {
+        npc_sparksocket_aa_cannonAI(Creature* creature) : ScriptedAI(creature) { }
+
+        // Called when the creature is spawned or when comes out of combat
+        void Reset()
+        {
+            searchPlayerDelay = 1000;
+            searchPlayerRange = 20.0f;
+            return;
+        }
+
+        void UpdateAI(uint32 diff)
+        {
+            if (searchPlayerDelay <= diff)
+            {
+                auto player = me->SelectNearestPlayer(searchPlayerRange);
+                if (player && (player->HasUnitMovementFlag(MOVEMENTFLAG_FLYING) || player->HasUnitMovementFlag(MOVEMENTFLAG_CAN_FLY)))
+                {
+                    me->CastSpell(player, SPELL_HOSTILE_AIRSPACE, false);
+                }
+                searchPlayerDelay = urand(1000, 2000);
+            }
+            else
+                searchPlayerDelay -= diff;
+        }
+
+        // For more ScriptedAI methods, check: 
+        // https://github.com/azerothcore/azerothcore-wotlk/blob/master/src/server/game/AI/ScriptedAI/ScriptedCreature.h
+
+    private:
+        uint32 searchPlayerDelay;
+        float  searchPlayerRange;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_sparksocket_aa_cannonAI(creature);
+    }
+};
+
 
 // Ours
 enum qSniffing
@@ -1123,6 +1180,7 @@ class spell_close_rift : public SpellScriptLoader
 
 void AddSC_storm_peaks()
 {
+    new npc_sparksocket_aa_cannon();
     // Ours
     new npc_frosthound();
     new npc_iron_watcher();
