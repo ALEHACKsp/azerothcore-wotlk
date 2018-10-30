@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -548,6 +548,7 @@ uint8 ArenaTeam::GetSlotByType(uint32 type)
     {
         case ARENA_TEAM_2v2: return 0;
         case ARENA_TEAM_3v3: return 1;
+        case ARENA_TEAM_1v1: //1v1 And 5v5 share same slot.
         case ARENA_TEAM_5v5: return 2;
         default:
             break;
@@ -591,6 +592,20 @@ uint32 ArenaTeam::GetPoints(uint32 memberRating)
     points *= sWorld->getRate(RATE_ARENA_POINTS);
 
     return (uint32) points;
+}
+
+uint32 ArenaTeam::GetAverageMMR(Player *player) const
+{
+    uint32 matchMakerRating = 0;
+    uint32 playerDivider = 0;
+    for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
+    {
+        if (itr->Guid != player->GetGUID())
+            continue;
+
+        matchMakerRating = itr->MatchMakerRating;
+    }
+    return matchMakerRating;
 }
 
 uint32 ArenaTeam::GetAverageMMR(Group* group) const

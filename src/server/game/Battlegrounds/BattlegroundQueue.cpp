@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -938,6 +938,83 @@ void BattlegroundQueue::BattlegroundQueueUpdate(BattlegroundBracketId bracket_id
         }
     }
 }
+
+void BattlegroundQueue::SoloArenaQueueUpdate(BattlegroundBracketId bracket_id, uint8 actionMask, bool isRated, uint32 arenaRatedTeamId)
+{
+    // if no players in queue - do nothing
+    if (m_QueuedGroups[bracket_id][BG_QUEUE_PREMADE_ALLIANCE].empty() &&
+        m_QueuedGroups[bracket_id][BG_QUEUE_PREMADE_HORDE].empty() &&
+        m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_ALLIANCE].empty() &&
+        m_QueuedGroups[bracket_id][BG_QUEUE_NORMAL_HORDE].empty())
+        return;
+
+    Battleground* bg_template = sBattlegroundMgr->GetBattlegroundTemplate(m_bgTypeId);
+    if (!bg_template)
+        return;
+
+    PvPDifficultyEntry const* bracketEntry = GetBattlegroundBracketById(bg_template->GetMapId(), bracket_id);
+    if (!bracketEntry)
+        return;
+
+    // get min and max players per team
+    uint32 MinPlayersPerTeam = bg_template->GetMinPlayersPerTeam();
+    uint32 MaxPlayersPerTeam = bg_template->GetMaxPlayersPerTeam();
+    if (bg_template->isArena())
+    {
+        if (actionMask & 0x05)
+            MinPlayersPerTeam = 1;
+        else
+            sBattlegroundMgr->isArenaTesting() ? 1 : m_arenaType;
+
+        MaxPlayersPerTeam = m_arenaType;
+    }
+
+    if (!isRated)
+    {
+        if (bg_template->isArena() && CheckSkirmishForSameFaction(bracket_id, MinPlayersPerTeam))
+        {
+            BattlegroundTypeId newBgTypeId = m_bgTypeId;
+            uint32 minLvl = bracketEntry->minLevel;
+            uint32 maxLvl = bracketEntry->maxLevel;
+
+            // create new battleground
+            Battleground* bg = sBattlegroundMgr->CreateNewBattleground(newBgTypeId, minLvl, maxLvl, m_arenaType, false);
+            if (!bg)
+                return;
+
+            // invite players
+            for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
+                for (GroupsQueueType::const_iterator citr = m_SelectionPools[TEAM_ALLIANCE + i].SelectedGroups.begin(); citr != m_SelectionPools[TEAM_ALLIANCE + i].SelectedGroups.end(); ++citr)
+                    BattlegroundMgr::InviteGroupToBG((*citr), bg, (*citr)->teamId);
+
+            bg->StartBattleground();
+        }
+    }
+    else
+    {
+        if (bg_template->isArena())
+        {
+            BattlegroundTypeId newBgTypeId = m_bgTypeId;
+            uint32 minLvl = bracketEntry->minLevel;
+            uint32 maxLvl = bracketEntry->maxLevel;
+
+            // create new battleground
+            Battleground* bg = sBattlegroundMgr->CreateNewBattleground(newBgTypeId, minLvl, maxLvl, m_arenaType, true);
+            if (!bg)
+                return;
+
+            // invite players
+            for (uint32 i = 0; i < BG_TEAMS_COUNT; i++)
+                for (GroupsQueueType::const_iterator citr = m_SelectionPools[TEAM_ALLIANCE + i].SelectedGroups.begin(); citr != m_SelectionPools[TEAM_ALLIANCE + i].SelectedGroups.end(); ++citr)
+                    BattlegroundMgr::InviteGroupToBG((*citr), bg, (*citr)->teamId);
+
+            bg->StartBattleground();
+        }
+    }
+
+}
+
+
 
 /*********************************************************/
 /***            BATTLEGROUND QUEUE EVENTS              ***/

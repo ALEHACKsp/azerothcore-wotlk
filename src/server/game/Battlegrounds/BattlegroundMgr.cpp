@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -491,6 +491,9 @@ Battleground* BattlegroundMgr::CreateNewBattleground(BattlegroundTypeId bgTypeId
         uint32 maxPlayersPerTeam = 0;
         switch (arenaType)
         {
+            case ARENA_TYPE_1v1:
+                maxPlayersPerTeam = 1;
+                break;
             case ARENA_TYPE_2v2:
                 maxPlayersPerTeam = 2;
                 break;
@@ -825,6 +828,8 @@ BattlegroundQueueTypeId BattlegroundMgr::BGQueueTypeId(BattlegroundTypeId bgType
                     return BATTLEGROUND_QUEUE_3v3;
                 case ARENA_TYPE_5v5:
                     return BATTLEGROUND_QUEUE_5v5;
+                case ARENA_TYPE_1v1:
+                    return BATTLEGROUND_QUEUE_1v1;
                 default:
                     return BATTLEGROUND_QUEUE_NONE;
             }
@@ -1052,6 +1057,8 @@ void BattlegroundMgr::InviteGroupToBG(GroupQueueInfo* ginfo, Battleground* bg, T
 
     ginfo->RemoveInviteTime = World::GetGameTimeMS() + INVITE_ACCEPT_WAIT_TIME;
 
+    printf("before loop through shit\n");
+
     // loop through the players
     for (std::set<uint64>::iterator itr = ginfo->Players.begin(); itr != ginfo->Players.end(); ++itr)
     {
@@ -1060,6 +1067,8 @@ void BattlegroundMgr::InviteGroupToBG(GroupQueueInfo* ginfo, Battleground* bg, T
 
         // player is removed from queue when logging out
         ASSERT(player);
+
+        printf("in loop through shit\n");
 
         // update average wait time
         bgQueue.PlayerInvitedToBGUpdateAverageWaitTime(ginfo);

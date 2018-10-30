@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -69,6 +69,7 @@ ERR_ARENA_TEAM_LEVEL_TOO_LOW_I
 
 enum ArenaTeamTypes
 {
+    ARENA_TEAM_1v1      = 1,
     ARENA_TEAM_2v2      = 2,
     ARENA_TEAM_3v3      = 3,
     ARENA_TEAM_5v5      = 5
@@ -124,6 +125,7 @@ class ArenaTeam
 
         uint32 GetRating() const          { return Stats.Rating; }
         uint32 GetAverageMMR(Group* group) const;
+        uint32 GetAverageMMR(Player *player) const;
 
         void SetCaptain(uint64 guid);
         bool AddMember(uint64 playerGuid);
