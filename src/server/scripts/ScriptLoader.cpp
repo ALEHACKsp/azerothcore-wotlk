@@ -9,13 +9,3 @@
 
 //smart trigger
 void AddSC_SmartScripts();
-
-
-
-
-
-
-
-
-
-

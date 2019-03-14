@@ -276,6 +276,10 @@ void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
     if (!unitTarget || !unitTarget->IsAlive() || unitTarget->HasAura(27827)) // Spirit of redemption doesn't make you death, but can cause infinite loops
         return;
 
+    if (unitTarget->GetTypeId() == TYPEID_PLAYER)
+        if (unitTarget->ToPlayer()->GetCommandStatus(CHEAT_GOD))
+            return;
+
     if (m_caster == unitTarget)                              // prevent interrupt message
         finish();
 
@@ -3230,7 +3234,10 @@ void Spell::EffectTaunt(SpellEffIndex /*effIndex*/)
 
     // xinef: Hand of Reckoning, cast before checing canhavethreatlist. fixes damage against pets
     if (m_spellInfo->Id == 62124 && unitTarget->GetVictim() != m_caster)
+    {
         m_caster->CastSpell(unitTarget, 67485, true);
+        unitTarget->CombatStart(m_caster);
+    }
 
     // this effect use before aura Taunt apply for prevent taunt already attacking target
     // for spell as marked "non effective at already attacking target"

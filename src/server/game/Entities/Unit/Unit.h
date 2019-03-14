@@ -938,7 +938,6 @@ private:
     uint32 _spellPhaseMask;
     uint32 _hitMask;
     uint32 _cooldown;
-    Spell* _spell;
     DamageInfo* _damageInfo;
     HealInfo* _healInfo;
     SpellInfo const* const _triggeredByAuraSpell;
@@ -2561,6 +2560,7 @@ class Unit : public WorldObject
         bool m_duringRemoveFromWorld; // lock made to not add stuff after begining removing from world
 
         uint32 _oldFactionId;           ///< faction before charm
+        bool m_petCatchUp;
 };
 
 namespace Trinity

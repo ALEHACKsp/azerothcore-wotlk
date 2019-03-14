@@ -83,6 +83,7 @@ if( NOPCH )
 endif()
 
 include(CheckPlatform)
+include(GroupSources)
 
 # basic packagesearching and setup (further support will be needed, this is a preliminary release!)
 set(OPENSSL_EXPECTED_VERSION 1.0.0)

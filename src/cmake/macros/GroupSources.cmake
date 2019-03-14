@@ -43,9 +43,11 @@ macro(GroupSources dir)
       endif()
     endforeach()
   endif()
-endmacro()
 
 if (WITH_SOURCE_TREE STREQUAL "hierarchical-folders")
   # Use folders
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
+
+endmacro()
+
