@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2008-2018 TrinityCore <https://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -138,7 +138,6 @@ void AddSC_instance_zulgurub();
 //void AddSC_alterac_mountains();
 void AddSC_arathi_highlands();
 void AddSC_blasted_lands();
-void AddSC_burning_steppes();
 void AddSC_duskwood();
 void AddSC_eastern_plaguelands();
 void AddSC_eversong_woods();
@@ -282,7 +281,7 @@ void AddEasternKingdomsScripts()
     //AddSC_alterac_mountains();
     AddSC_arathi_highlands();
     AddSC_blasted_lands();
-    AddSC_burning_steppes();
+    //AddSC_burning_steppes();
     AddSC_duskwood();
     AddSC_eastern_plaguelands();
     AddSC_eversong_woods();

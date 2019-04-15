@@ -14851,8 +14851,8 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                 {
                     //VendorItemData const* vendorItems = creature->GetVendorItems();
                     //if (!vendorItems || vendorItems->Empty())
-                    VendorItemData const* vendorItems = itr->second.ActionMenuId ? nullptr : creature->GetVendorItems();
-                    if (!itr->second.ActionMenuId && (!vendorItems || vendorItems->Empty()))
+                    VendorItemData const* vendorItems = itr->second.ActionMenuID ? nullptr : creature->GetVendorItems();
+                    if (!itr->second.ActionMenuID && (!vendorItems || vendorItems->Empty()))
                     {
                         sLog->outErrorDb("Creature %u (Entry: %u) have UNIT_NPC_FLAG_VENDOR but have empty trading item list.", creature->GetGUIDLow(), creature->GetEntry());
                         canTalk = false;
