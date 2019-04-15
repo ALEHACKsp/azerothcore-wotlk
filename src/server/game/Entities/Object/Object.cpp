@@ -964,11 +964,11 @@ void MovementInfo::OutDebug()
         sLog->outString("splineElevation: %f", splineElevation);
 }
 
-WorldObject::WorldObject(bool isWorldObject) : WorldLocation(), LastUsedScriptID(0),
+WorldObject::WorldObject(bool isWorldObject) : WorldLocation(),
 #ifdef ELUNA
 elunaEvents(NULL),
 #endif
-m_name(""), m_isActive(false), m_isWorldObject(isWorldObject), m_zoneScript(NULL),
+LastUsedScriptID(0), m_name(""), m_isActive(false), m_isWorldObject(isWorldObject), m_zoneScript(NULL),
 m_transport(NULL), m_currMap(NULL), m_InstanceId(0),
 m_phaseMask(PHASEMASK_NORMAL), m_notifyflags(0), m_executed_notifies(0)
 {
@@ -1819,6 +1819,16 @@ void WorldObject::SendPlaySound(uint32 Sound, bool OnlySelf)
 { 
     WorldPacket data(SMSG_PLAY_SOUND, 4);
     data << Sound;
+    if (OnlySelf && GetTypeId() == TYPEID_PLAYER)
+        this->ToPlayer()->GetSession()->SendPacket(&data);
+    else
+        SendMessageToSet(&data, true); // ToSelf ignored in this case
+}
+
+void WorldObject::SendPlayMusic(uint32 Music, bool OnlySelf)
+{
+    WorldPacket data(SMSG_PLAY_MUSIC, 4);
+    data << Music;
     if (OnlySelf && GetTypeId() == TYPEID_PLAYER)
         this->ToPlayer()->GetSession()->SendPacket(&data);
     else

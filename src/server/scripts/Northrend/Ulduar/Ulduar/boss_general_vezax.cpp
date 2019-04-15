@@ -10,6 +10,7 @@
 #include "PassiveAI.h"
 #include "Player.h"
 #include "WorldSession.h"
+#include "BanManager.h"
 
 enum VezaxSpellData
 {
@@ -211,7 +212,7 @@ public:
 
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
-            
+
             switch( events.GetEvent() )
             {
                 case 0:
@@ -470,7 +471,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             UpdateVictim();
-            
+
             timer += diff;
             if (timer >= 2000)
             {
@@ -680,7 +681,7 @@ class go_ulduar_pure_saronite_deposit : public GameObjectScript
 public:
     go_ulduar_pure_saronite_deposit() : GameObjectScript("go_ulduar_pure_saronite_deposit") { }
 
-    bool OnGossipHello(Player* plr, GameObject* go)
+    bool OnGossipHello(Player* plr, GameObject* go) override
     {
         if (plr->IsGameMaster())
             return false;
@@ -690,7 +691,7 @@ public:
             {
                 std::string accountName;
                 AccountMgr::GetName(plr->GetSession()->GetAccountId(), accountName);
-                sWorld->BanAccount(BAN_ACCOUNT, accountName, "0s", "Tele hack", "Server");
+                sBan->BanAccount(accountName, "0s", "Tele hack", "Server");
                 return true;
             }
 

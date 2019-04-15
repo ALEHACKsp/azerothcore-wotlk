@@ -155,7 +155,7 @@ public:
             events.RescheduleEvent(EVENT_ARTRUIS_HP_CHECK, 1000);
             events.RescheduleEvent(EVENT_ARTRUIS_TALK1, 6000);
         }
-        
+
         void JustDied(Unit* /*killer*/)
         {
             if (GameObject* go = me->SummonGameObject(GO_ARTRUIS_PHYLACTERY, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600000))
@@ -287,7 +287,6 @@ quest Still At It (12644)
 #define ACTION_ORANGE 4
 #define ACTION_PAPAYA 5
 #define NPC_WANTS_BANANAS 28537
-#define NPC_MCMANUS 28566
 
 class npc_still_at_it_trigger : public CreatureScript
 {
@@ -311,10 +310,9 @@ public:
         uint8 currentstep;
         uint8 expectedaction;
         uint8 playeraction;
-        Creature* mcmanus;
 
-        npc_still_at_it_triggerAI(Creature* pCreature) : NullCreatureAI(pCreature) { }
-        
+        npc_still_at_it_triggerAI(Creature* pCreature) : NullCreatureAI(pCreature) {}
+
         void Reset()
         {
             running = false;
@@ -344,12 +342,10 @@ public:
 
         void Start()
         {
-            mcmanus = me->FindNearestCreature(NPC_MCMANUS, 20.0f, true);
             timer = 5000;
             running = true;
             stepcount = urand(5,10);
-            //Say(MCM_TEXT_START);
-            mcmanus->AI()->Talk(0);
+            Say(MCM_TEXT_START);
         }
 
         void CheckAction(uint8 a, uint64 guid)
@@ -361,22 +357,20 @@ public:
             {
                 currentstep++;
                 uint8 s = urand(0,2);
-                
+
                 if (Creature* th = ObjectAccessor::GetCreature(*me, thunderbrewGUID))
                     th->HandleEmoteCommand(EMOTE_ONESHOT_CHEER_NO_SHEATHE);
 
-                //switch (s)
-                //{
-                //    case 0: Say(MCM_TEXT_CORRECT1); break;
-                //    case 1: Say(MCM_TEXT_CORRECT2); break;
-                //    default:Say(MCM_TEXT_CORRECT3); break;
-                //}
-                mcmanus->AI()->Talk(6);
+                switch (s)
+                {
+                    case 0: Say(MCM_TEXT_CORRECT1); break;
+                    case 1: Say(MCM_TEXT_CORRECT2); break;
+                    default:Say(MCM_TEXT_CORRECT3); break;
+                }
 
                 if (currentstep >= stepcount)
                 {
-                    //Say(MCM_TEXT_SUCCESS1);
-                    mcmanus->AI()->Talk(6);
+                    Say(MCM_TEXT_SUCCESS1);
                     success = true;
                     timer = 3000;
                 }
@@ -388,8 +382,7 @@ public:
             }
             else
             {
-                mcmanus->AI()->Talk(7);
-                //Say(MCM_TEXT_FAILED);
+                Say(MCM_TEXT_FAILED);
                 Reset();
             }
         }
@@ -422,15 +415,13 @@ public:
                 }
                 else if ( success)
                 {
-                    mcmanus->AI()->Talk(8);
-                    //Say(MCM_TEXT_SUCCESS2);
+                    Say(MCM_TEXT_SUCCESS2);
                     me->SummonGameObject(190643, 5546.55f, 5768.0f, -78.03f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 60000);
                     Reset();
                 }
                 else if (expectedaction != 0) // didn't make it in 10 seconds
                 {
-                    mcmanus->AI()->Talk(7);
-                    //Say(MCM_TEXT_FAILED);
+                    Say(MCM_TEXT_FAILED);
                     Reset();
                 }
                 else // it's time to rand next move
@@ -438,26 +429,11 @@ public:
                     expectedaction = urand(1,5);
                     switch (expectedaction)
                     {
-                        case 1:
-                            //Say(MCM_TEXT_PRESSURE);
-                            mcmanus->AI()->Talk(4);
-                            break;
-                        case 2:
-                            //Say(MCM_TEXT_HEAT);
-                            mcmanus->AI()->Talk(5);
-                            break;
-                        case 3:
-                            mcmanus->AI()->Talk(3);
-                            //Say(MCM_TEXT_BANANA);
-                            break;
-                        case 4:
-                            mcmanus->AI()->Talk(1);
-                            //Say(MCM_TEXT_ORANGE);
-                            break;
-                        case 5:
-                            mcmanus->AI()->Talk(2);
-                            //Say(MCM_TEXT_PAPAYA);
-                            break;
+                        case 1: Say(MCM_TEXT_PRESSURE); break;
+                        case 2: Say(MCM_TEXT_HEAT); break;
+                        case 3: Say(MCM_TEXT_BANANA); break;
+                        case 4: Say(MCM_TEXT_ORANGE); break;
+                        case 5: Say(MCM_TEXT_PAPAYA); break;
                     }
                     timer = 10000;
                 }
@@ -471,7 +447,7 @@ class npc_mcmanus : public CreatureScript
 public:
     npc_mcmanus() : CreatureScript("npc_mcmanus") {}
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (!player)
             return true;
@@ -480,14 +456,13 @@ public:
             player->PrepareQuestMenu(creature->GetGUID());
 
         if (player->GetQuestStatus(12644) == QUEST_STATUS_INCOMPLETE)
-            //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to start the distillation, uh, Tipsy.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, u8"我准备好开始蒸馏作业了,美味!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "I'm ready to start the distillation, uh, Tipsy.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
-        player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
+        SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32  /*uiSender*/, uint32 uiAction)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32  /*uiSender*/, uint32 uiAction) override
     {
         if (!player)
             return true;
@@ -504,7 +479,7 @@ public:
                 }
         }
 
-        player->CLOSE_GOSSIP_MENU();
+        CloseGossipMenuFor(player);
         return true;
     }
 };
@@ -514,7 +489,7 @@ class go_pressure_valve : public GameObjectScript
 public:
     go_pressure_valve() : GameObjectScript("go_pressure_valve") { }
 
-    bool OnGossipHello(Player* player, GameObject* go)
+    bool OnGossipHello(Player* player, GameObject* go) override
     {
         if (!player)
             return true;
@@ -533,7 +508,7 @@ class go_brazier : public GameObjectScript
 public:
     go_brazier() : GameObjectScript("go_brazier") { }
 
-    bool OnGossipHello(Player* player, GameObject* go)
+    bool OnGossipHello(Player* player, GameObject* go) override
     {
         if (!player)
             return true;
@@ -610,33 +585,33 @@ class npc_vekjik : public CreatureScript
 public:
     npc_vekjik() : CreatureScript("npc_vekjik") { }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (creature->IsQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
         if (player->GetQuestStatus(QUEST_MAKING_PEACE) == QUEST_STATUS_INCOMPLETE)
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_VEKJIK_ITEM1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-            player->SEND_GOSSIP_MENU(GOSSIP_TEXTID_VEKJIK1, creature->GetGUID());
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_VEKJIK_ITEM1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            SendGossipMenuFor(player, GOSSIP_TEXTID_VEKJIK1, creature->GetGUID());
             return true;
         }
 
-        player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
+        SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
-        player->PlayerTalkClass->ClearMenus();
+        ClearGossipMenuFor(player);
         switch (action)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
-                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_VEKJIK_ITEM2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
-                player->SEND_GOSSIP_MENU(GOSSIP_TEXTID_VEKJIK2, creature->GetGUID());
+                AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_VEKJIK_ITEM2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+                SendGossipMenuFor(player, GOSSIP_TEXTID_VEKJIK2, creature->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
-                player->CLOSE_GOSSIP_MENU();
+                CloseGossipMenuFor(player);
                 creature->AI()->Talk(SAY_TEXTID_VEKJIK1, player);
                 player->AreaExploredOrEventHappens(QUEST_MAKING_PEACE);
                 //creature->CastSpell(player, SPELL_FREANZYHEARTS_FURY, true);
@@ -672,34 +647,34 @@ class npc_avatar_of_freya : public CreatureScript
 public:
     npc_avatar_of_freya() : CreatureScript("npc_avatar_of_freya") { }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (creature->IsQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
         if (player->GetQuestStatus(QUEST_FREYA_PACT) == QUEST_STATUS_INCOMPLETE)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_AOF1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_ITEM_AOF1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
 
-        player->PlayerTalkClass->SendGossipMenu(GOSSIP_TEXTID_AVATAR1, creature->GetGUID());
+        SendGossipMenuFor(player, GOSSIP_TEXTID_AVATAR1, creature);
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
-        player->PlayerTalkClass->ClearMenus();
+        ClearGossipMenuFor(player);
         switch (action)
         {
         case GOSSIP_ACTION_INFO_DEF+1:
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_AOF2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
-            player->PlayerTalkClass->SendGossipMenu(GOSSIP_TEXTID_AVATAR2, creature->GetGUID());
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_ITEM_AOF2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            SendGossipMenuFor(player, GOSSIP_TEXTID_AVATAR2, creature);
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_AOF3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
-            player->PlayerTalkClass->SendGossipMenu(GOSSIP_TEXTID_AVATAR3, creature->GetGUID());
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_ITEM_AOF3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
+            SendGossipMenuFor(player, GOSSIP_TEXTID_AVATAR3, creature);
             break;
         case GOSSIP_ACTION_INFO_DEF+3:
             player->CastSpell(player, SPELL_FREYA_CONVERSATION, true);
-            player->CLOSE_GOSSIP_MENU();
+            CloseGossipMenuFor(player);
             break;
         }
         return true;
@@ -1099,32 +1074,32 @@ public:
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const override
     {
         return new npc_adventurous_dwarfAI(creature);
     }
 
-    bool OnGossipHello(Player* player, Creature* creature)
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (player->GetQuestStatus(QUEST_12634) != QUEST_STATUS_INCOMPLETE)
             return false;
 
         if (player->GetItemCount(ITEM_ORANGE) < 1)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_OPTION_ORANGE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_OPTION_ORANGE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         if (player->GetItemCount(ITEM_BANANAS) < 2)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_OPTION_BANANAS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_OPTION_BANANAS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
         if (player->GetItemCount(ITEM_PAPAYA) < 1)
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_OPTION_PAPAYA, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_OPTION_PAPAYA, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-        player->PlayerTalkClass->SendGossipMenu(GOSSIP_MENU_DWARF, creature->GetGUID());
+        SendGossipMenuFor(player, GOSSIP_MENU_DWARF, creature);
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
-        player->PlayerTalkClass->ClearMenus();
+        ClearGossipMenuFor(player);
         uint32 spellId = 0;
 
         switch (action)

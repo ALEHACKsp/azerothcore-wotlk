@@ -10,55 +10,133 @@
 #include "SpellAuraEffects.h"
 #include "Player.h"
 
+#define BASE_CAMP    200
+#define GROUNDS      201
+#define FORGE        202
+#define SCRAPYARD    203
+#define ANTECHAMBER  204
+#define WALKWAY      205
+#define CONSERVATORY 206
+#define MADNESS      207
+#define SPARK        208
 
-//#define KEEPER_GOSSIP "Lend us your aid, keeper. Together we shall defeat Yogg-Saron."
-//
-//#define NPC_FREYA_GOSSIP_YELL "Eonar, your servant calls for your blessing!"
-//#define NPC_HODIR_GOSSIP_YELL "The veil of winter will protect you, champions!"
-//#define NPC_MIMIRON_GOSSIP_YELL "Combat matrix enhanced. Behold wonderous rapidity!"
-//#define NPC_THORIM_GOSSIP_YELL "Golganneth, lend me your strengh! Grant my mortal allies the power of thunder!"
+class go_ulduar_teleporter : public GameObjectScript
+{
+public:
+    go_ulduar_teleporter() : GameObjectScript("ulduar_teleporter") { }
 
-#define KEEPER_GOSSIP u8"给我们一些帮助，守护者。我们一起打败尤格-萨隆。"
-#define NPC_FREYA_GOSSIP_YELL u8"Eonar，你的仆人呼唤你的祝福！"
-#define NPC_HODIR_GOSSIP_YELL u8"冬天的面纱会保护你，勇士们！"
-#define NPC_MIMIRON_GOSSIP_YELL u8"战斗矩阵增强。太快了！"
-#define NPC_THORIM_GOSSIP_YELL u8"Golganneth，借我你的力量！给我的凡人们雷声的力量！"
+    bool OnGossipHello(Player* player, GameObject* go) override
+    {
+        InstanceScript* pInstance = go->GetInstanceScript();
+        if (!pInstance)
+            return true;
+
+        AddGossipItemFor(player, 0, "Teleport to the Expedition Base Camp.", GOSSIP_SENDER_MAIN, BASE_CAMP);
+        if (pInstance->GetData(TYPE_LEVIATHAN) >= DONE) // count special
+        {
+            AddGossipItemFor(player, 0, "Teleport to the Formation Grounds.", GOSSIP_SENDER_MAIN, GROUNDS);
+            if (pInstance->GetData(TYPE_LEVIATHAN) == DONE)
+            {
+                AddGossipItemFor(player, 0, "Teleport to the Colossal Forge.", GOSSIP_SENDER_MAIN, FORGE);
+                if (pInstance->GetData(TYPE_XT002) == DONE)
+                {
+                    AddGossipItemFor(player, 0, "Teleport to the Scrapyard.", GOSSIP_SENDER_MAIN, SCRAPYARD);
+                    AddGossipItemFor(player, 0, "Teleport to the Antechamber of Ulduar.", GOSSIP_SENDER_MAIN, ANTECHAMBER);
+                    if (pInstance->GetData(TYPE_KOLOGARN) == DONE)
+                    {
+                        AddGossipItemFor(player, 0, "Teleport to the Shattered Walkway.", GOSSIP_SENDER_MAIN, WALKWAY);
+                        if (pInstance->GetData(TYPE_AURIAYA) == DONE)
+                        {
+                            AddGossipItemFor(player, 0, "Teleport to the Conservatory of Life.", GOSSIP_SENDER_MAIN, CONSERVATORY);
+                            if (pInstance->GetData(DATA_CALL_TRAM))
+                                AddGossipItemFor(player, 0, "Teleport to the Spark of Imagination.", GOSSIP_SENDER_MAIN, SPARK);
+                            if (pInstance->GetData(TYPE_VEZAX) == DONE)
+                                AddGossipItemFor(player, 0, "Teleport to the Prison of Yogg-Saron.", GOSSIP_SENDER_MAIN, MADNESS);
+                        }
+                    }
+                }
+            }
+        }
+
+        SendGossipMenuFor(player, 14424, go->GetGUID());
+        return true;
+    }
+
+    bool OnGossipSelect(Player* player, GameObject*  /*go*/, uint32 sender, uint32 action) override
+    {
+        if (sender != GOSSIP_SENDER_MAIN || !player->getAttackers().empty())
+            return true;
+
+        switch(action)
+        {
+            case BASE_CAMP:
+                player->TeleportTo(603, -706.122f, -92.6024f, 429.876f, 0);
+                CloseGossipMenuFor(player); break;
+            case GROUNDS:
+                player->TeleportTo(603, 131.248f, -35.3802f, 409.804f, 0);
+                CloseGossipMenuFor(player); break;
+            case FORGE:
+                player->TeleportTo(603, 553.233f, -12.3247f, 409.679f, 0);
+                CloseGossipMenuFor(player); break;
+            case SCRAPYARD:
+                player->TeleportTo(603, 926.292f, -11.4635f, 418.595f, 0);
+                CloseGossipMenuFor(player); break;
+            case ANTECHAMBER:
+                player->TeleportTo(603, 1498.09f, -24.246f, 420.967f, 0);
+                CloseGossipMenuFor(player); break;
+            case WALKWAY:
+                player->TeleportTo(603, 1859.45f, -24.1f, 448.9f, 0);
+                CloseGossipMenuFor(player); break;
+            case CONSERVATORY:
+                player->TeleportTo(603, 2086.27f, -24.3134f, 421.239f, 0);
+                CloseGossipMenuFor(player); break;
+            case MADNESS:
+                player->TeleportTo(603, 1854.8f, -11.46f, 334.57f, 4.8f);
+                CloseGossipMenuFor(player); break;
+            case SPARK:
+                player->TeleportTo(603, 2517.9f, 2568.9f, 412.7f, 0);
+                CloseGossipMenuFor(player); break;
+        }
+
+        return true;
+    }
+};
 
 class npc_ulduar_keeper : public CreatureScript
 {
 public:
     npc_ulduar_keeper() : CreatureScript("npc_ulduar_keeper_gossip") { }
 
-    bool OnGossipHello(Player* pPlayer, Creature* pCreature)
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, KEEPER_GOSSIP, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-        pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, pCreature->GetGUID());
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Lend us your aid, keeper. Together we shall defeat Yogg-Saron.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+        SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
         return true;
     }
 
-    bool OnGossipSelect(Player*  /*player*/, Creature* creature, uint32  /*uiSender*/, uint32  /*uiAction*/)
+    bool OnGossipSelect(Player*  /*player*/, Creature* creature, uint32  /*uiSender*/, uint32  /*uiAction*/) override
     {
         creature->SetUInt32Value(UNIT_NPC_FLAGS, 0);
         uint8 _keeper = 0;
         switch (creature->GetEntry())
         {
             case NPC_FREYA_GOSSIP:
-                creature->MonsterYell(NPC_FREYA_GOSSIP_YELL, LANG_UNIVERSAL, 0);
+                creature->MonsterYell("Eonar, your servant calls for your blessing!", LANG_UNIVERSAL, 0);
                 creature->PlayDirectSound(15535);
                 _keeper = KEEPER_FREYA;
                 break;
             case NPC_HODIR_GOSSIP:
-                creature->MonsterYell(NPC_HODIR_GOSSIP_YELL, LANG_UNIVERSAL, 0);
+                creature->MonsterYell("The veil of winter will protect you, champions!", LANG_UNIVERSAL, 0);
                 creature->PlayDirectSound(15559);
                 _keeper = KEEPER_HODIR;
                 break;
             case NPC_MIMIRON_GOSSIP:
-                creature->MonsterYell(NPC_MIMIRON_GOSSIP_YELL, LANG_UNIVERSAL, 0);
+                creature->MonsterYell("Combat matrix enhanced. Behold wonderous rapidity!", LANG_UNIVERSAL, 0);
                 creature->PlayDirectSound(15630);
                 _keeper = KEEPER_MIMIRON;
                 break;
             case NPC_THORIM_GOSSIP:
-                creature->MonsterYell(NPC_THORIM_GOSSIP_YELL, LANG_UNIVERSAL, 0);
+                creature->MonsterYell("Golganneth, lend me your strengh! Grant my mortal allies the power of thunder!", LANG_UNIVERSAL, 0);
                 creature->PlayDirectSound(15750);
                 _keeper = KEEPER_THORIM;
                 break;
@@ -106,14 +184,14 @@ class npc_ulduar_snow_mound : public CreatureScript
 public:
     npc_ulduar_snow_mound() : CreatureScript("npc_ulduar_snow_mound") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_ulduar_snow_moundAI(pCreature);
+        return new npc_ulduar_snow_moundAI(creature);
     }
 
     struct npc_ulduar_snow_moundAI : public ScriptedAI
     {
-        npc_ulduar_snow_moundAI(Creature* pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_snow_moundAI(Creature* creature) : ScriptedAI(creature)
         {
             activated = false;
             me->CastSpell(me, 64615, true);
@@ -152,14 +230,14 @@ class npc_ulduar_storm_tempered_keeper : public CreatureScript
 public:
     npc_ulduar_storm_tempered_keeper() : CreatureScript("npc_ulduar_storm_tempered_keeper") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_ulduar_storm_tempered_keeperAI(pCreature);
+        return new npc_ulduar_storm_tempered_keeperAI(creature);
     }
 
     struct npc_ulduar_storm_tempered_keeperAI : public ScriptedAI
     {
-        npc_ulduar_storm_tempered_keeperAI(Creature* pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_storm_tempered_keeperAI(Creature* creature) : ScriptedAI(creature)
         {
             otherGUID = 0;
         }
@@ -241,14 +319,14 @@ class npc_ulduar_arachnopod_destroyer : public CreatureScript
 public:
     npc_ulduar_arachnopod_destroyer() : CreatureScript("npc_ulduar_arachnopod_destroyer") { }
 
-    CreatureAI* GetAI(Creature* pCreature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_ulduar_arachnopod_destroyerAI(pCreature);
+        return new npc_ulduar_arachnopod_destroyerAI(creature);
     }
 
     struct npc_ulduar_arachnopod_destroyerAI : public ScriptedAI
     {
-        npc_ulduar_arachnopod_destroyerAI(Creature* pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_arachnopod_destroyerAI(Creature* creature) : ScriptedAI(creature)
         {
             _spawnedMechanic = false;
             me->ApplySpellImmune(0, IMMUNITY_ID, 64919, true); // Ice Nova from Ice Turret
@@ -402,14 +480,14 @@ class go_call_tram : public GameObjectScript
 public:
     go_call_tram() : GameObjectScript("go_call_tram") { }
 
-    bool OnGossipHello(Player* /*pPlayer*/, GameObject* pGo)
+    bool OnGossipHello(Player* /*player*/, GameObject* go) override
     {
-        InstanceScript* pInstance = pGo->GetInstanceScript();
+        InstanceScript* pInstance = go->GetInstanceScript();
 
         if (!pInstance)
             return false;
 
-        switch(pGo->GetEntry())
+        switch(go->GetEntry())
         {
             case 194914:
             case 194438:
@@ -424,98 +502,11 @@ public:
     }
 };
 
-class spell_ulduar_teleporter : public SpellScriptLoader
-{
-public:
-    spell_ulduar_teleporter() : SpellScriptLoader("spell_ulduar_teleporter") { }
-
-    enum Teleport_Spells
-    {
-        BASE_CAMP = 64014,
-        GROUNDS = 64032,
-        FORGE = 64028,
-        SCRAPYARD = 64031,
-        ANTECHAMBER = 64030,
-        WALKWAY = 64029,
-        CONSERVATORY = 64024,
-        MADNESS = 64025,
-        SPARK = 65042
-    };
-
-    class spell_ulduar_teleporter_SpellScript : public SpellScript
-    {
-        PrepareSpellScript(spell_ulduar_teleporter_SpellScript);
-
-        SpellCastResult CheckRequirement()
-        {
-            if (GetExplTargetUnit()->GetTypeId() != TYPEID_PLAYER)
-                return SPELL_FAILED_DONT_REPORT;
-
-            if (GetExplTargetUnit()->IsInCombat())
-            {
-                Spell::SendCastResult(GetExplTargetUnit()->ToPlayer(), GetSpellInfo(), 0, SPELL_FAILED_AFFECTING_COMBAT);
-                return SPELL_FAILED_AFFECTING_COMBAT;
-            }
-
-            return SPELL_CAST_OK;
-        }
-
-        //doing real teleporting because all spells are just broken
-        void TeleportPlayer()
-        {
-            auto SpellID = GetSpellInfo()->Id;
-            auto player = (Player*)GetExplTargetUnit();
-
-            switch (SpellID)
-            {
-            case BASE_CAMP:
-                player->TeleportTo(603, -706.122f, -92.6024f, 429.876f, 0);
-                break;
-            case GROUNDS:
-                player->TeleportTo(603, 131.248f, -35.3802f, 409.804f, 0);
-                break;
-            case FORGE:
-                player->TeleportTo(603, 553.233f, -12.3247f, 409.679f, 0);
-                break;
-            case SCRAPYARD:
-                player->TeleportTo(603, 926.292f, -11.4635f, 418.595f, 0);
-                break;
-            case ANTECHAMBER:
-                player->TeleportTo(603, 1498.09f, -24.246f, 420.967f, 0);
-                break;
-            case WALKWAY:
-                player->TeleportTo(603, 1859.45f, -24.1f, 448.9f, 0);
-                break;
-            case CONSERVATORY:
-                player->TeleportTo(603, 2086.27f, -24.3134f, 421.239f, 0);
-                break;
-            case MADNESS:
-                player->TeleportTo(603, 1854.8f, -11.46f, 334.57f, 4.8f);
-                break;
-            case SPARK:
-                player->TeleportTo(603, 2517.9f, 2568.9f, 412.7f, 0);
-                break;
-            }
-        }
-
-        void Register() override
-        {
-            OnCheckCast += SpellCheckCastFn(spell_ulduar_teleporter_SpellScript::CheckRequirement);
-            AfterCast   += SpellCastFn(spell_ulduar_teleporter_SpellScript::TeleportPlayer);
-        }
-    };
-
-    SpellScript* GetSpellScript() const override
-    {
-        return new spell_ulduar_teleporter_SpellScript();
-    }
-};
-
 
 void AddSC_ulduar()
 {
+    new go_ulduar_teleporter();
     new npc_ulduar_keeper();
-    new spell_ulduar_teleporter();
 
     new spell_ulduar_energy_sap();
     new npc_ulduar_snow_mound();
